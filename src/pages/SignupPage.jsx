@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // 추가
+import "./SignupPage.css"; // 스타일 분리할게
 
-// Axios 기본 설정
 const axiosInstance = axios.create({
   baseURL: "http://localhost:8080/api/v1",
 });
@@ -26,6 +27,8 @@ const SignupPage = () => {
   const LOGIN_ID_POLICY = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
   const PASSWORD_POLICY = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!]{8,20}$/;
   const NICKNAME_POLICY = /^[A-Za-z가-힣\d]{3,10}$/;
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,8 +61,8 @@ const SignupPage = () => {
 
   const checkLoginId = async (loginId) => {
     try {
-      const { data } = await axiosInstance.get(`/members/check-login-id`, { params: { loginId } });
-      setIsUnique((prev) => ({ ...prev, loginId: data }));
+      const { data } = await axiosInstance.get(`/members/exists/login-id`, { params: { loginId } });
+      setIsUnique((prev) => ({ ...prev, loginId: data.data }));
     } catch (error) {
       console.error(error);
     }
@@ -67,8 +70,8 @@ const SignupPage = () => {
 
   const checkEmail = async (email) => {
     try {
-      const { data } = await axiosInstance.get(`/members/check-email`, { params: { email } });
-      setIsUnique((prev) => ({ ...prev, email: data }));
+      const { data } = await axiosInstance.get(`/members/exists/email`, { params: { email } });
+      setIsUnique((prev) => ({ ...prev, email: data.data }));
     } catch (error) {
       console.error(error);
     }
@@ -76,8 +79,8 @@ const SignupPage = () => {
 
   const checkNickname = async (nickname) => {
     try {
-      const { data } = await axiosInstance.get(`/members/check-nickname`, { params: { nickname } });
-      setIsUnique((prev) => ({ ...prev, nickname: data }));
+      const { data } = await axiosInstance.get(`/members/exists/nickname`, { params: { nickname } });
+      setIsUnique((prev) => ({ ...prev, nickname: data.data }));
     } catch (error) {
       console.error(error);
     }
@@ -90,11 +93,9 @@ const SignupPage = () => {
       alert("중복된 정보가 있습니다.");
       return;
     }
-
+  
     try {
       const formData = new FormData();
-
-      // JSON 데이터를 Blob으로 추가
       const memberDataBlob = new Blob([
         JSON.stringify({
           loginId: form.loginId,
@@ -105,89 +106,85 @@ const SignupPage = () => {
           statusMessage: form.statusMessage,
         }),
       ], { type: "application/json" });
-
+  
       formData.append("memberSaveRequestDto", memberDataBlob);
-
-      // 프로필 이미지 추가
       if (form.profileImage) {
         formData.append("file", form.profileImage);
       }
-
-      const { data } = await axiosInstance.post(`/members/join`, formData, {
+  
+      await axiosInstance.post(`/members`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      alert("회원가입이 완료되었습니다!");
+  
+      // 회원가입 성공 후 자동 로그인
+      const { data } = await axiosInstance.post("/members/login", {
+        loginId: form.loginId,
+        password: form.password,
+      });
+  
+      if (data.success) {
+        localStorage.setItem("loginId", form.loginId);
+        localStorage.setItem("memberId", data.data.memberId); // ✅ 추가
+        localStorage.setItem("nickname", data.data.nickname);
+        localStorage.setItem("profileImageUrl", data.data.profileImageUrl || "");
+        localStorage.setItem("statusMessage", data.data.statusMessage || "");
+        alert("회원가입 및 로그인 성공!");
+        navigate("/");
+      }
     } catch (error) {
       console.error(error);
       alert("회원가입에 실패했습니다.");
     }
   };
+  
 
   return (
-    <div>
-      <h1>회원가입</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>로그인 아이디:</label>
-          <input
-            type="text"
-            name="loginId"
-            value={form.loginId}
-            onChange={handleChange}
-          />
-          {errors.loginId && <p style={{ color: "red" }}>{errors.loginId}</p>}
-          {!isUnique.loginId && <p style={{ color: "red" }}>중복된 아이디입니다.</p>}
+    <div className="signup-container">
+      <h1 className="signup-title">회원가입</h1>
+      <form className="signup-form" onSubmit={handleSubmit}>
+        {/* 로그인 아이디 */}
+        <div className="form-group">
+          <label>로그인 아이디</label>
+          <input type="text" name="loginId" value={form.loginId} onChange={handleChange} />
+          {errors.loginId && <p className="error-text">{errors.loginId}</p>}
+          {!isUnique.loginId && <p className="error-text">중복된 아이디입니다.</p>}
         </div>
-        <div>
-          <label>비밀번호:</label>
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-          />
-          {errors.password && <p style={{ color: "red" }}>{errors.password}</p>}
+
+        {/* 비밀번호 */}
+        <div className="form-group">
+          <label>비밀번호</label>
+          <input type="password" name="password" value={form.password} onChange={handleChange} />
+          {errors.password && <p className="error-text">{errors.password}</p>}
         </div>
-        <div>
-          <label>이메일:</label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-          />
-          {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
-          {!isUnique.email && <p style={{ color: "red" }}>중복된 이메일입니다.</p>}
+
+        {/* 이메일 */}
+        <div className="form-group">
+          <label>이메일</label>
+          <input type="email" name="email" value={form.email} onChange={handleChange} />
+          {!isUnique.email && <p className="error-text">중복된 이메일입니다.</p>}
         </div>
-        <div>
-          <label>닉네임:</label>
-          <input
-            type="text"
-            name="nickname"
-            value={form.nickname}
-            onChange={handleChange}
-          />
-          {errors.nickname && <p style={{ color: "red" }}>{errors.nickname}</p>}
-          {!isUnique.nickname && <p style={{ color: "red" }}>중복된 닉네임입니다.</p>}
+
+        {/* 닉네임 */}
+        <div className="form-group">
+          <label>닉네임</label>
+          <input type="text" name="nickname" value={form.nickname} onChange={handleChange} />
+          {errors.nickname && <p className="error-text">{errors.nickname}</p>}
+          {!isUnique.nickname && <p className="error-text">중복된 닉네임입니다.</p>}
         </div>
-        <div>
-          <label>상태 메시지:</label>
-          <input
-            type="text"
-            name="statusMessage"
-            value={form.statusMessage}
-            onChange={handleChange}
-          />
+
+        {/* 상태 메시지 */}
+        <div className="form-group">
+          <label>상태 메시지</label>
+          <input type="text" name="statusMessage" value={form.statusMessage} onChange={handleChange} />
         </div>
-        <div>
-          <label>프로필 이미지:</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
+
+        {/* 프로필 이미지 */}
+        <div className="form-group">
+          <label>프로필 이미지</label>
+          <input type="file" accept="image/*" onChange={handleFileChange} />
         </div>
-        <button type="submit">회원가입</button>
+
+        <button type="submit" className="submit-button">회원가입</button>
       </form>
     </div>
   );

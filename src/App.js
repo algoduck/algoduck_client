@@ -1,13 +1,17 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MainPage from "./pages/MainPage";
 import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage"; // 추가
+import UpdateProfilePage from "./pages/UpdateProfilePage";
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* SignupPage를 루트 경로로 설정 */}
-        <Route path="/" element={<SignupPage />} />
+        <Route path="/" element={<MainPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/update-profile" element={<UpdateProfilePage />} />
       </Routes>
     </Router>
   );
