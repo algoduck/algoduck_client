@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import duckImage from "../assets/duck.png";
+import duckImage from "../assets/duckling.png";
 
 const MainPage = () => {
   const navigate = useNavigate();
