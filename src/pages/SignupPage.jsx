@@ -15,9 +15,9 @@ const SignupPage = () => {
 
   const [errors, setErrors] = useState({});
   const [isUnique, setIsUnique] = useState({
-    loginId: false,
-    email: false,
-    nickname: false
+    loginId: true,
+    email: true,
+    nickname: true
   });
 
   const LOGIN_ID_POLICY = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
@@ -62,6 +62,7 @@ const SignupPage = () => {
       setIsUnique((prev) => ({ ...prev, loginId: data.data }));
     } catch (error) {
       console.error(error);
+      setIsUnique((prev) => ({ ...prev, loginId: true })); // 실패 시 "중복 아님" 처리
     }
   };
 
@@ -71,6 +72,7 @@ const SignupPage = () => {
       setIsUnique((prev) => ({ ...prev, email: data.data }));
     } catch (error) {
       console.error(error);
+      setIsUnique((prev) => ({ ...prev, email: true }));
     }
   };
 
@@ -82,12 +84,14 @@ const SignupPage = () => {
       setIsUnique((prev) => ({ ...prev, nickname: data.data }));
     } catch (error) {
       console.error(error);
+      setIsUnique((prev) => ({ ...prev, nickname: true }));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validatePolicy()) return;
+
     if (!isUnique.loginId || !isUnique.email || !isUnique.nickname) {
       alert("중복된 정보가 있습니다.");
       return;
@@ -118,7 +122,6 @@ const SignupPage = () => {
         headers: { "Content-Type": "multipart/form-data" }
       });
 
-      // 회원가입 성공 후 자동 로그인
       const { data } = await AxiosInstance.post("/members/login", {
         loginId: form.loginId,
         password: form.password
@@ -126,10 +129,12 @@ const SignupPage = () => {
 
       if (data.success) {
         localStorage.setItem("loginId", form.loginId);
-        localStorage.setItem("memberId", data.data.memberId); // ✅ 추가
+        localStorage.setItem("memberId", data.data.memberId);
         localStorage.setItem("nickname", data.data.nickname);
         localStorage.setItem("profileImageUrl", data.data.profileImageUrl || "");
         localStorage.setItem("statusMessage", data.data.statusMessage || "");
+        // console.log("profileImageUrl = ", profileImageUrl);
+
         alert("회원가입 및 로그인 성공!");
         navigate("/");
       }
@@ -148,7 +153,7 @@ const SignupPage = () => {
           <label>로그인 아이디</label>
           <input type="text" name="loginId" value={form.loginId} onChange={handleChange} />
           {errors.loginId && <p className="error-text">{errors.loginId}</p>}
-          {!isUnique.loginId && <p className="error-text">중복된 아이디입니다.</p>}
+          {form.loginId && !isUnique.loginId && <p className="error-text">중복된 아이디입니다.</p>}
         </div>
 
         {/* 비밀번호 */}
@@ -162,7 +167,7 @@ const SignupPage = () => {
         <div className="form-group">
           <label>이메일</label>
           <input type="email" name="email" value={form.email} onChange={handleChange} />
-          {!isUnique.email && <p className="error-text">중복된 이메일입니다.</p>}
+          {form.email && !isUnique.email && <p className="error-text">중복된 이메일입니다.</p>}
         </div>
 
         {/* 닉네임 */}
@@ -170,7 +175,9 @@ const SignupPage = () => {
           <label>닉네임</label>
           <input type="text" name="nickname" value={form.nickname} onChange={handleChange} />
           {errors.nickname && <p className="error-text">{errors.nickname}</p>}
-          {!isUnique.nickname && <p className="error-text">중복된 닉네임입니다.</p>}
+          {form.nickname && !isUnique.nickname && (
+            <p className="error-text">중복된 닉네임입니다.</p>
+          )}
         </div>
 
         {/* 상태 메시지 */}

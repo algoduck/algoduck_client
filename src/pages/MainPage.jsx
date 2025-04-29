@@ -16,6 +16,8 @@ const MainPage = () => {
     const statusMessage = localStorage.getItem("statusMessage");
 
     if (loginId) {
+      console.log("profileImageUrl = ", profileImageUrl);
+
       setIsLoggedIn(true);
       setNickname(nickname || "");
       setProfileImageUrl(profileImageUrl || "");

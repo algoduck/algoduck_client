@@ -22,7 +22,6 @@ const UpdateProfilePage = () => {
         }
 
         const { data } = await AxiosInstance.get(`/members/id/${memberId}`);
-
         if (data.success && data.data) {
           const member = data.data;
           setForm({
@@ -33,7 +32,7 @@ const UpdateProfilePage = () => {
             statusMessage: member.statusMessage || "",
             password: "",
             profileImage: null,
-            profileImageUrl: member.profileImageUrl || "" // ✅ 기존 프로필 이미지 경로 저장
+            profileImageUrl: member.profileImageUrl || ""
           });
         } else {
           alert("회원 정보를 불러올 수 없습니다.");
@@ -75,18 +74,11 @@ const UpdateProfilePage = () => {
     try {
       const formData = new FormData();
       const memberDataBlob = new Blob(
-        [
-          JSON.stringify({
-            password: form.password,
-            statusMessage: form.statusMessage
-          })
-        ],
+        [JSON.stringify({ password: form.password, statusMessage: form.statusMessage })],
         { type: "application/json" }
       );
 
       formData.append("memberUpdateRequestDto", memberDataBlob);
-
-      // 파일을 새로 선택한 경우만 파일 추가
       if (form.profileImage) {
         formData.append("file", form.profileImage);
       }
@@ -96,7 +88,6 @@ const UpdateProfilePage = () => {
       });
 
       if (data.success) {
-        // localStorage 업데이트
         localStorage.setItem("nickname", data.data.nickname);
         localStorage.setItem(
           "profileImageUrl",
@@ -106,7 +97,7 @@ const UpdateProfilePage = () => {
 
         alert("프로필 업데이트가 완료되었습니다!");
         navigate("/");
-        window.location.reload(); // 메인페이지 새로고침해서 최신 데이터 반영
+        window.location.reload();
       } else {
         alert("업데이트에 실패했습니다.");
       }
@@ -126,25 +117,21 @@ const UpdateProfilePage = () => {
       <form className="signup-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>로그인 아이디</label>
-          <input type="text" name="loginId" value={form.loginId} disabled />
+          <input type="text" value={form.loginId} disabled />
         </div>
-
         <div className="form-group">
           <label>이메일</label>
-          <input type="email" name="email" value={form.email} disabled />
+          <input type="email" value={form.email} disabled />
         </div>
-
         <div className="form-group">
           <label>닉네임</label>
-          <input type="text" name="nickname" value={form.nickname} disabled />
+          <input type="text" value={form.nickname} disabled />
         </div>
-
         <div className="form-group">
           <label>비밀번호</label>
           <input type="password" name="password" value={form.password} onChange={handleChange} />
           {errors.password && <p className="error-text">{errors.password}</p>}
         </div>
-
         <div className="form-group">
           <label>상태 메시지</label>
           <input
@@ -154,12 +141,10 @@ const UpdateProfilePage = () => {
             onChange={handleChange}
           />
         </div>
-
         <div className="form-group">
           <label>프로필 이미지</label>
           <input type="file" accept="image/*" onChange={handleFileChange} />
         </div>
-
         <button type="submit" className="submit-button">
           프로필 업데이트
         </button>
