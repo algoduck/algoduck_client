@@ -3,7 +3,13 @@ name: Deploy to Vercel
 on:
   push:
     branches:
-      - main
+      - develop
+
+  workflow_dispatch: # ✅ 수동 배포 트리거 추가
+    inputs:
+      triggerReason:
+        description: "Why are you manually deploying?"
+        required: false
 
 jobs:
   build-and-deploy:
