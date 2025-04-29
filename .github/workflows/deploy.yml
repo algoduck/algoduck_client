@@ -28,7 +28,9 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Create .env file
-        run: cp .env.was.template .env
+        run: |
+          export EC2_PUBLIC_IP=${{ secrets.EC2_PUBLIC_IP }}
+          envsubst '${EC2_PUBLIC_IP}' < .env.was.template > .env
 
       - name: Debug .env
         run: cat .env
