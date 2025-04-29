@@ -1,11 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom"; // 추가
-import "./SignupPage.css"; // 스타일 분리할게
-
-const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080/api/v1",
-});
+import { useNavigate } from "react-router-dom";
+import "./SignupPage.css";
+import AxiosInstance from "../common/AxiosInstance";
 
 const SignupPage = () => {
   const [form, setForm] = useState({
@@ -61,7 +57,7 @@ const SignupPage = () => {
 
   const checkLoginId = async (loginId) => {
     try {
-      const { data } = await axiosInstance.get(`/members/exists/login-id`, { params: { loginId } });
+      const { data } = await AxiosInstance.get(`/members/exists/login-id`, { params: { loginId } });
       setIsUnique((prev) => ({ ...prev, loginId: data.data }));
     } catch (error) {
       console.error(error);
@@ -70,7 +66,7 @@ const SignupPage = () => {
 
   const checkEmail = async (email) => {
     try {
-      const { data } = await axiosInstance.get(`/members/exists/email`, { params: { email } });
+      const { data } = await AxiosInstance.get(`/members/exists/email`, { params: { email } });
       setIsUnique((prev) => ({ ...prev, email: data.data }));
     } catch (error) {
       console.error(error);
@@ -79,7 +75,7 @@ const SignupPage = () => {
 
   const checkNickname = async (nickname) => {
     try {
-      const { data } = await axiosInstance.get(`/members/exists/nickname`, { params: { nickname } });
+      const { data } = await AxiosInstance.get(`/members/exists/nickname`, { params: { nickname } });
       setIsUnique((prev) => ({ ...prev, nickname: data.data }));
     } catch (error) {
       console.error(error);
@@ -112,12 +108,12 @@ const SignupPage = () => {
         formData.append("file", form.profileImage);
       }
   
-      await axiosInstance.post(`/members`, formData, {
+      await AxiosInstance.post(`/members`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
   
       // 회원가입 성공 후 자동 로그인
-      const { data } = await axiosInstance.post("/members/login", {
+      const { data } = await AxiosInstance.post("/members/login", {
         loginId: form.loginId,
         password: form.password,
       });

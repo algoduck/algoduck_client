@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "./SignupPage.css";
-
-const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080/api/v1",
-});
+import AxiosInstance from "../common/AxiosInstance";
 
 const UpdateProfilePage = () => {
   const navigate = useNavigate();
@@ -24,7 +20,7 @@ const UpdateProfilePage = () => {
           return;
         }
 
-        const { data } = await axiosInstance.get(`/members/id/${memberId}`);
+        const { data } = await AxiosInstance.get(`/members/id/${memberId}`);
 
         if (data.success && data.data) {
           const member = data.data;
@@ -91,7 +87,7 @@ const UpdateProfilePage = () => {
         formData.append("file", form.profileImage);
       }
 
-      const { data } = await axiosInstance.put(`/members/${form.memberId}`, formData, {
+      const { data } = await AxiosInstance.put(`/members/${form.memberId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

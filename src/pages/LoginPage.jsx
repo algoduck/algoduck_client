@@ -1,16 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
-
-const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080/api/v1",
-});
+import AxiosInstance from "../common/AxiosInstance";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [loginId, setLoginId] = useState("");
-  const [memberId, setMemberId] = useState(0);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -18,7 +13,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const { data } = await axiosInstance.post("/members/login", {
+      const { data } = await AxiosInstance.post("/members/login", {
         loginId,
         password,
       });
