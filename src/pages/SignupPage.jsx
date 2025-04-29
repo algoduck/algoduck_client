@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
 import AxiosInstance from "../common/AxiosInstance";
 
@@ -10,25 +10,26 @@ const SignupPage = () => {
     email: "",
     nickname: "",
     statusMessage: "",
-    profileImage: null,
+    profileImage: null
   });
 
   const [errors, setErrors] = useState({});
   const [isUnique, setIsUnique] = useState({
     loginId: false,
     email: false,
-    nickname: false,
+    nickname: false
   });
 
   const LOGIN_ID_POLICY = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
-  const PASSWORD_POLICY = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!]{8,20}$/;
+  const PASSWORD_POLICY =
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!]{8,20}$/;
   const NICKNAME_POLICY = /^[A-Za-z가-힣\d]{3,10}$/;
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const {name, value} = e.target;
-    setForm((prev) => ({...prev, [name]: value}));
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
 
     if (name === "loginId") checkLoginId(value);
     if (name === "email") checkEmail(value);
@@ -37,7 +38,7 @@ const SignupPage = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setForm((prev) => ({...prev, profileImage: file}));
+    setForm((prev) => ({ ...prev, profileImage: file }));
   };
 
   const validatePolicy = () => {
@@ -57,8 +58,8 @@ const SignupPage = () => {
 
   const checkLoginId = async (loginId) => {
     try {
-      const {data} = await AxiosInstance.get("/members/exists/login-id", {params: {loginId}});
-      setIsUnique((prev) => ({...prev, loginId: data.data}));
+      const { data } = await AxiosInstance.get("/members/exists/login-id", { params: { loginId } });
+      setIsUnique((prev) => ({ ...prev, loginId: data.data }));
     } catch (error) {
       console.error(error);
     }
@@ -66,8 +67,8 @@ const SignupPage = () => {
 
   const checkEmail = async (email) => {
     try {
-      const {data} = await AxiosInstance.get("/members/exists/email", {params: {email}});
-      setIsUnique((prev) => ({...prev, email: data.data}));
+      const { data } = await AxiosInstance.get("/members/exists/email", { params: { email } });
+      setIsUnique((prev) => ({ ...prev, email: data.data }));
     } catch (error) {
       console.error(error);
     }
@@ -75,8 +76,10 @@ const SignupPage = () => {
 
   const checkNickname = async (nickname) => {
     try {
-      const {data} = await AxiosInstance.get("/members/exists/nickname", {params: {nickname}});
-      setIsUnique((prev) => ({...prev, nickname: data.data}));
+      const { data } = await AxiosInstance.get("/members/exists/nickname", {
+        params: { nickname }
+      });
+      setIsUnique((prev) => ({ ...prev, nickname: data.data }));
     } catch (error) {
       console.error(error);
     }
@@ -92,16 +95,19 @@ const SignupPage = () => {
 
     try {
       const formData = new FormData();
-      const memberDataBlob = new Blob([
-        JSON.stringify({
-          loginId: form.loginId,
-          password: form.password,
-          email: form.email,
-          nickname: form.nickname,
-          role: "GENERAL",
-          statusMessage: form.statusMessage,
-        }),
-      ], {type: "application/json"});
+      const memberDataBlob = new Blob(
+        [
+          JSON.stringify({
+            loginId: form.loginId,
+            password: form.password,
+            email: form.email,
+            nickname: form.nickname,
+            role: "GENERAL",
+            statusMessage: form.statusMessage
+          })
+        ],
+        { type: "application/json" }
+      );
 
       formData.append("memberSaveRequestDto", memberDataBlob);
       if (form.profileImage) {
@@ -109,13 +115,13 @@ const SignupPage = () => {
       }
 
       await AxiosInstance.post("/members", formData, {
-        headers: {"Content-Type": "multipart/form-data"},
+        headers: { "Content-Type": "multipart/form-data" }
       });
 
       // 회원가입 성공 후 자동 로그인
-      const {data} = await AxiosInstance.post("/members/login", {
+      const { data } = await AxiosInstance.post("/members/login", {
         loginId: form.loginId,
-        password: form.password,
+        password: form.password
       });
 
       if (data.success) {
@@ -132,7 +138,6 @@ const SignupPage = () => {
       alert("회원가입에 실패했습니다.");
     }
   };
-
 
   return (
     <div className="signup-container">
@@ -171,7 +176,12 @@ const SignupPage = () => {
         {/* 상태 메시지 */}
         <div className="form-group">
           <label>상태 메시지</label>
-          <input type="text" name="statusMessage" value={form.statusMessage} onChange={handleChange} />
+          <input
+            type="text"
+            name="statusMessage"
+            value={form.statusMessage}
+            onChange={handleChange}
+          />
         </div>
 
         {/* 프로필 이미지 */}
@@ -180,7 +190,9 @@ const SignupPage = () => {
           <input type="file" accept="image/*" onChange={handleFileChange} />
         </div>
 
-        <button type="submit" className="submit-button">회원가입</button>
+        <button type="submit" className="submit-button">
+          회원가입
+        </button>
       </form>
     </div>
   );

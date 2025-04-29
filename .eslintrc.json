@@ -2,10 +2,10 @@
   "env": {
     "browser": true,
     "es2021": true,
-    "node": true,         // ✅ process 허용
-    "jest": true          // ✅ test, expect 허용
+    "node": true, // ✅ process 허용
+    "jest": true // ✅ test, expect 허용
   },
-  "extends": ["google", "plugin:react/recommended"],
+  "extends": ["google", "plugin:react/recommended", "plugin:prettier/recommended", "prettier"],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module",
@@ -17,10 +17,11 @@
   "rules": {
     "require-jsdoc": "off",
     "react/prop-types": "off",
-    "react/react-in-jsx-scope": "off",  // ✅ React 자동 runtime인 경우 끄기
+    "react/react-in-jsx-scope": "off", // ✅ React 자동 runtime인 경우 끄기
     "max-len": ["warn", { "code": 120 }],
     "quotes": ["error", "double"],
-    "semi": ["error", "always"]
+    "semi": ["error", "always"],
+    "object-curly-spacing": ["error", "always"]
   },
   "settings": {
     "react": {
