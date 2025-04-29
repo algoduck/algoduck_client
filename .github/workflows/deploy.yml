@@ -34,6 +34,9 @@ jobs:
           envsubst < .env > .env.final
           mv .env.final .env
 
+      - name: Debug .env
+        run: cat .env
+
       - name: Build
         run: npm run build
 
