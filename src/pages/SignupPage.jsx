@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import "./SignupPage.css";
 import AxiosInstance from "../common/AxiosInstance";
 
@@ -27,8 +27,8 @@ const SignupPage = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const {name, value} = e.target;
+    setForm((prev) => ({...prev, [name]: value}));
 
     if (name === "loginId") checkLoginId(value);
     if (name === "email") checkEmail(value);
@@ -37,7 +37,7 @@ const SignupPage = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setForm((prev) => ({ ...prev, profileImage: file }));
+    setForm((prev) => ({...prev, profileImage: file}));
   };
 
   const validatePolicy = () => {
@@ -57,8 +57,8 @@ const SignupPage = () => {
 
   const checkLoginId = async (loginId) => {
     try {
-      const { data } = await AxiosInstance.get(`/members/exists/login-id`, { params: { loginId } });
-      setIsUnique((prev) => ({ ...prev, loginId: data.data }));
+      const {data} = await AxiosInstance.get("/members/exists/login-id", {params: {loginId}});
+      setIsUnique((prev) => ({...prev, loginId: data.data}));
     } catch (error) {
       console.error(error);
     }
@@ -66,8 +66,8 @@ const SignupPage = () => {
 
   const checkEmail = async (email) => {
     try {
-      const { data } = await AxiosInstance.get(`/members/exists/email`, { params: { email } });
-      setIsUnique((prev) => ({ ...prev, email: data.data }));
+      const {data} = await AxiosInstance.get("/members/exists/email", {params: {email}});
+      setIsUnique((prev) => ({...prev, email: data.data}));
     } catch (error) {
       console.error(error);
     }
@@ -75,8 +75,8 @@ const SignupPage = () => {
 
   const checkNickname = async (nickname) => {
     try {
-      const { data } = await AxiosInstance.get(`/members/exists/nickname`, { params: { nickname } });
-      setIsUnique((prev) => ({ ...prev, nickname: data.data }));
+      const {data} = await AxiosInstance.get("/members/exists/nickname", {params: {nickname}});
+      setIsUnique((prev) => ({...prev, nickname: data.data}));
     } catch (error) {
       console.error(error);
     }
@@ -89,7 +89,7 @@ const SignupPage = () => {
       alert("중복된 정보가 있습니다.");
       return;
     }
-  
+
     try {
       const formData = new FormData();
       const memberDataBlob = new Blob([
@@ -101,23 +101,23 @@ const SignupPage = () => {
           role: "GENERAL",
           statusMessage: form.statusMessage,
         }),
-      ], { type: "application/json" });
-  
+      ], {type: "application/json"});
+
       formData.append("memberSaveRequestDto", memberDataBlob);
       if (form.profileImage) {
         formData.append("file", form.profileImage);
       }
-  
-      await AxiosInstance.post(`/members`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+
+      await AxiosInstance.post("/members", formData, {
+        headers: {"Content-Type": "multipart/form-data"},
       });
-  
+
       // 회원가입 성공 후 자동 로그인
-      const { data } = await AxiosInstance.post("/members/login", {
+      const {data} = await AxiosInstance.post("/members/login", {
         loginId: form.loginId,
         password: form.password,
       });
-  
+
       if (data.success) {
         localStorage.setItem("loginId", form.loginId);
         localStorage.setItem("memberId", data.data.memberId); // ✅ 추가
@@ -132,7 +132,7 @@ const SignupPage = () => {
       alert("회원가입에 실패했습니다.");
     }
   };
-  
+
 
   return (
     <div className="signup-container">
