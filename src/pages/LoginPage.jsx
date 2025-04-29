@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./SignupPage.css";
+import "./SignupPage.css"; // 로그인도 동일 스타일 사용
 import AxiosInstance from "../common/AxiosInstance";
 
 const LoginPage = () => {
@@ -11,6 +11,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(""); // 이전 에러 초기화
 
     try {
       const { data } = await AxiosInstance.post("/members/login", {
@@ -19,20 +20,21 @@ const LoginPage = () => {
       });
 
       if (data.success) {
-        const memberInfo = data.data; // 서버 응답 MemberResponseDto
+        const memberInfo = data.data;
         localStorage.setItem("loginId", loginId);
         localStorage.setItem("memberId", memberInfo.memberId);
         localStorage.setItem("nickname", memberInfo.nickname);
-        localStorage.setItem("profileImageUrl", memberInfo.profileImageUrl || ""); // 추가 저장
+        localStorage.setItem("profileImageUrl", memberInfo.profileImageUrl || "");
+        localStorage.setItem("statusMessage", memberInfo.statusMessage || "");
 
         alert("로그인 성공!");
         navigate("/");
       } else {
-        setError(data.message || "로그인 실패");
+        setError(data.message || "아이디 또는 비밀번호가 올바르지 않습니다.");
       }
     } catch (err) {
       console.error(err);
-      setError("로그인 실패했습니다.");
+      setError("서버 오류로 로그인에 실패했습니다.");
     }
   };
 
