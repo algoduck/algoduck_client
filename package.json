@@ -42,9 +42,12 @@
   "devDependencies": {
     "eslint": "^8.57.1",
     "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
     "eslint-plugin-react": "^7.37.5",
     "husky": "^8.0.3",
-    "lint-staged": "^15.5.1"
+    "lint-staged": "^15.5.1",
+    "prettier": "^3.5.3"
   },
   "lint-staged": {
     "src/**/*.{js,jsx}": "eslint"

@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
 import AxiosInstance from "../common/AxiosInstance";
 
@@ -13,9 +13,9 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const {data} = await AxiosInstance.post("/members/login", {
+      const { data } = await AxiosInstance.post("/members/login", {
         loginId,
-        password,
+        password
       });
 
       if (data.success) {
