@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import "./SignupPage.css";
 import AxiosInstance from "../common/AxiosInstance";
 
@@ -20,7 +20,7 @@ const UpdateProfilePage = () => {
           return;
         }
 
-        const { data } = await AxiosInstance.get(`/members/id/${memberId}`);
+        const {data} = await AxiosInstance.get(`/members/id/${memberId}`);
 
         if (data.success && data.data) {
           const member = data.data;
@@ -49,13 +49,13 @@ const UpdateProfilePage = () => {
   }, [navigate]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const {name, value} = e.target;
+    setForm((prev) => ({...prev, [name]: value}));
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setForm((prev) => ({ ...prev, profileImage: file }));
+    setForm((prev) => ({...prev, profileImage: file}));
   };
 
   const validatePolicy = () => {
@@ -78,7 +78,7 @@ const UpdateProfilePage = () => {
           password: form.password,
           statusMessage: form.statusMessage,
         }),
-      ], { type: "application/json" });
+      ], {type: "application/json"});
 
       formData.append("memberUpdateRequestDto", memberDataBlob);
 
@@ -87,16 +87,16 @@ const UpdateProfilePage = () => {
         formData.append("file", form.profileImage);
       }
 
-      const { data } = await AxiosInstance.put(`/members/${form.memberId}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const {data} = await AxiosInstance.put(`/members/${form.memberId}`, formData, {
+        headers: {"Content-Type": "multipart/form-data"},
       });
 
       if (data.success) {
         // localStorage 업데이트
         localStorage.setItem("nickname", data.data.nickname);
         localStorage.setItem(
-          "profileImageUrl",
-          data.data.profileImageUrl || form.profileImageUrl || ""
+            "profileImageUrl",
+            data.data.profileImageUrl || form.profileImageUrl || "",
         );
         localStorage.setItem("statusMessage", data.data.statusMessage || "");
 
@@ -113,7 +113,7 @@ const UpdateProfilePage = () => {
   };
 
   if (!form) {
-    return <div style={{ textAlign: "center", marginTop: "100px" }}>로딩 중...</div>;
+    return <div style={{textAlign: "center", marginTop: "100px"}}>로딩 중...</div>;
   }
 
   return (
