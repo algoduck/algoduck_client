@@ -30,7 +30,7 @@ jobs:
       - name: Create .env file
         run: |
           cp .env.was.template .env
-          export EC2_PUBLIC_IP=${{ secrets.EC2_PUBLIC_IP }}
+          export EC2_DOMAIN_NAME=${{ secrets.EC2_DOMAIN_NAME }}
           envsubst < .env > .env.final
           mv .env.final .env
 
