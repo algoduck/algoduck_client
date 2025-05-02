@@ -104,6 +104,10 @@ const MainPage = () => {
             </Link>
           </>
         )}
+        <Link to="/ranking">
+          <button style={{ margin: "10px", padding: "10px 20px", fontSize: "16px" }}>랭킹</button>
+        </Link>
+
         <Link to="/problems">
           <button style={{ margin: "10px", padding: "10px 20px", fontSize: "16px" }}>문제</button>
         </Link>
