@@ -6,6 +6,7 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage"; // 추가
 import UpdateProfilePage from "./pages/UpdateProfilePage";
 import ProblemListPage from "./pages/ProblemListPage";
+import ProblemSolvePage from "./pages/ProblemSolvePage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/update-profile" element={<UpdateProfilePage />} />
         <Route path="/problems" element={<ProblemListPage />} />
+        <Route path="/problems/:problemId" element={<ProblemSolvePage />} />
       </Routes>
     </Router>
   );
