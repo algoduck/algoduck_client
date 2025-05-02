@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
 import AxiosInstance from "../common/AxiosInstance";
+import LogoHeader from "../common/LogoHeader";
 
 const SignupPage = () => {
   const [form, setForm] = useState({
@@ -146,6 +147,7 @@ const SignupPage = () => {
 
   return (
     <div className="signup-container">
+      <LogoHeader />
       <h1 className="signup-title">회원가입</h1>
       <form className="signup-form" onSubmit={handleSubmit}>
         {/* 로그인 아이디 */}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import duckImage from "../assets/duckling.png";
+import LogoHeader from "../common/LogoHeader";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -44,6 +45,7 @@ const MainPage = () => {
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <LogoHeader />
       <h1 style={{ fontSize: "48px" }}>알고오리</h1>
 
       <img src={duckImage} alt="오리" style={{ width: "525px", margin: "30px 0" }} />
