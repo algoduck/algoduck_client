@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignupPage.css"; // 로그인도 동일 스타일 사용
 import AxiosInstance from "../common/AxiosInstance";
+import LogoHeader from "../common/LogoHeader";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ const LoginPage = () => {
 
   return (
     <div className="signup-container">
+      <LogoHeader />
       <h1 className="signup-title">로그인</h1>
       <form className="signup-form" onSubmit={handleSubmit}>
         <div className="form-group">

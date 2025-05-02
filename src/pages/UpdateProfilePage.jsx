@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
 import AxiosInstance from "../common/AxiosInstance";
+import LogoHeader from "../common/LogoHeader";
 
 const UpdateProfilePage = () => {
   const navigate = useNavigate();
@@ -113,6 +114,7 @@ const UpdateProfilePage = () => {
 
   return (
     <div className="signup-container">
+      <LogoHeader />
       <h1 className="signup-title">프로필 업데이트</h1>
       <form className="signup-form" onSubmit={handleSubmit}>
         <div className="form-group">
