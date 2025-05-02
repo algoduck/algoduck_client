@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AxiosInstance from "../common/AxiosInstance";
 import LogoHeader from "../common/LogoHeader";
+import { Link } from "react-router-dom";
 
 const RankingPage = () => {
   const [members, setMembers] = useState([]);
@@ -61,9 +62,17 @@ const RankingPage = () => {
                     backgroundColor: "#f9f9f9"
                   }}
                 >
-                  <strong>{(pageNumber - 1) * pageSize + index + 1}위</strong> - {member.nickname} (
-                  {member.loginId})<br />
-                  <span>푼 문제 수: {member.solved}</span>
+                  <Link
+                    to={`/members/${member.memberId}`}
+                    style={{
+                      textDecoration: "none",
+                      color: "inherit"
+                    }}
+                  >
+                    <strong>{(pageNumber - 1) * pageSize + index + 1}위</strong> - {member.nickname}{" "}
+                    ({member.loginId})<br />
+                    <span>푼 문제 수: {member.solved}</span>
+                  </Link>
                 </li>
               ))}
           </ul>
