@@ -1,38 +1,27 @@
-import React, { useEffect, useState } from "react";
-import AxiosInstance from "../common/AxiosInstance";
+import React, { useState } from "react";
 import LogoHeader from "../common/LogoHeader";
 import ProblemCard from "../components/ProblemCard";
 import Pagination from "../components/Pagination";
+import useFetchList from "../hooks/useFetchList";
 
 const ProblemListPage = () => {
-  const [problems, setProblems] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 100;
 
-  const totalPages = Math.ceil(totalCount / pageSize); // 전체 페이지 수 계산
+  const {
+    data: problems,
+    totalCount,
+    isLoading
+  } = useFetchList(
+    "/problems",
+    {
+      pageNumber,
+      pageSize
+    },
+    "problems"
+  );
 
-  const fetchProblems = async () => {
-    try {
-      const { data } = await AxiosInstance.get("/problems", {
-        params: { pageNumber, pageSize }
-      });
-
-      if (data.success) {
-        setProblems(data.data.problems);
-        setTotalCount(data.data.totalCount);
-      } else {
-        alert("문제 목록을 불러오는 데 실패했습니다.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("문제 조회 중 오류가 발생했습니다.");
-    }
-  };
-
-  useEffect(() => {
-    fetchProblems();
-  }, [pageNumber]);
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
     <div style={{ textAlign: "center", padding: "40px" }}>
@@ -40,7 +29,9 @@ const ProblemListPage = () => {
       <h1 style={{ fontSize: "36px", marginBottom: "40px" }}>📚 문제 </h1>
 
       <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "left" }}>
-        {problems.length === 0 ? (
+        {isLoading ? (
+          <p style={{ textAlign: "center" }}>로딩 중...</p>
+        ) : problems.length === 0 ? (
           <p style={{ textAlign: "center" }}>문제가 없습니다.</p>
         ) : (
           <ul style={{ listStyle: "none", padding: 0 }}>
