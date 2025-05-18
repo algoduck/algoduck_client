@@ -34,14 +34,6 @@ const ProblemListPage = () => {
     fetchProblems();
   }, [pageNumber]);
 
-  const handlePrev = () => {
-    if (pageNumber > 1) setPageNumber(pageNumber - 1);
-  };
-
-  const handleNext = () => {
-    if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
-  };
-
   return (
     <div style={{ textAlign: "center", padding: "40px" }}>
       <LogoHeader />
@@ -59,12 +51,7 @@ const ProblemListPage = () => {
         )}
       </div>
 
-      <Pagination
-        pageNumber={pageNumber}
-        totalPages={totalPages}
-        onPrev={handlePrev}
-        onNext={handleNext}
-      />
+      <Pagination pageNumber={pageNumber} totalPages={totalPages} onPageChange={setPageNumber} />
     </div>
   );
 };
