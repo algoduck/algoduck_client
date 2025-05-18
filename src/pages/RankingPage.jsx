@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import AxiosInstance from "../common/AxiosInstance";
 import LogoHeader from "../common/LogoHeader";
-import { Link } from "react-router-dom";
+import Pagination from "../components/Pagination";
+import MemberCard from "../components/MemberCard";
 
 const RankingPage = () => {
   const [members, setMembers] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 100;
+
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   const fetchMembers = async () => {
     try {
@@ -36,7 +39,7 @@ const RankingPage = () => {
   };
 
   const handleNext = () => {
-    if (pageNumber * pageSize < totalCount) setPageNumber(pageNumber + 1);
+    if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
   };
 
   return (
@@ -52,46 +55,24 @@ const RankingPage = () => {
             {members
               .sort((a, b) => b.solved - a.solved)
               .map((member, index) => (
-                <li
+                <MemberCard
                   key={member.memberId}
-                  style={{
-                    border: "1px solid #ddd",
-                    borderRadius: "8px",
-                    padding: "16px",
-                    marginBottom: "12px",
-                    backgroundColor: "#f9f9f9"
-                  }}
-                >
-                  <Link
-                    to={`/members/${member.memberId}`}
-                    style={{
-                      textDecoration: "none",
-                      color: "inherit"
-                    }}
-                  >
-                    <strong>{(pageNumber - 1) * pageSize + index + 1}위</strong> - {member.nickname}{" "}
-                    ({member.loginId})<br />
-                    <span>푼 문제 수: {member.solved}</span>
-                  </Link>
-                </li>
+                  member={member}
+                  index={index}
+                  pageNumber={pageNumber}
+                  pageSize={pageSize}
+                />
               ))}
           </ul>
         )}
       </div>
 
-      <div style={{ marginTop: "30px" }}>
-        <button onClick={handlePrev} disabled={pageNumber <= 1} style={{ margin: "0 10px" }}>
-          ◀ 이전
-        </button>
-        <span>페이지 {pageNumber}</span>
-        <button
-          onClick={handleNext}
-          disabled={pageNumber * pageSize >= totalCount}
-          style={{ margin: "0 10px" }}
-        >
-          다음 ▶
-        </button>
-      </div>
+      <Pagination
+        pageNumber={pageNumber}
+        totalPages={totalPages}
+        onPrev={handlePrev}
+        onNext={handleNext}
+      />
     </div>
   );
 };

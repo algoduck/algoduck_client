@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AxiosInstance from "../common/AxiosInstance";
 import LogoHeader from "../common/LogoHeader";
+import ProfileImage from "../components/ProfileImage";
 
 const MemberDetailPage = () => {
   const { memberId } = useParams();
@@ -47,17 +48,7 @@ const MemberDetailPage = () => {
       </button>
 
       <div>
-        <img
-          src={member.profileImageUrl}
-          alt="프로필 이미지"
-          style={{
-            width: "150px",
-            height: "150px",
-            borderRadius: "50%",
-            objectFit: "cover",
-            marginBottom: "20px"
-          }}
-        />
+        <ProfileImage src={member.profileImageUrl} size={150} />
         <h1 style={{ fontSize: "28px", fontWeight: "bold" }}>{member.nickname}</h1>
         <p>아이디: {member.loginId}</p>
         <p>이메일: {member.email}</p>

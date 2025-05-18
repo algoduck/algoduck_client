@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
 import AxiosInstance from "../common/AxiosInstance";
 import LogoHeader from "../common/LogoHeader";
+import FormGroup from "../components/FormGroup";
 
 const SignupPage = () => {
   const [form, setForm] = useState({
@@ -63,7 +64,7 @@ const SignupPage = () => {
       setIsUnique((prev) => ({ ...prev, loginId: data.data }));
     } catch (error) {
       console.error(error);
-      setIsUnique((prev) => ({ ...prev, loginId: true })); // 실패 시 "중복 아님" 처리
+      setIsUnique((prev) => ({ ...prev, loginId: true }));
     }
   };
 
@@ -134,7 +135,6 @@ const SignupPage = () => {
         localStorage.setItem("nickname", data.data.nickname);
         localStorage.setItem("profileImageUrl", data.data.profileImageUrl || "");
         localStorage.setItem("statusMessage", data.data.statusMessage || "");
-        // console.log("profileImageUrl = ", profileImageUrl);
 
         alert("회원가입 및 로그인 성공!");
         navigate("/");
@@ -150,50 +150,52 @@ const SignupPage = () => {
       <LogoHeader />
       <h1 className="signup-title">회원가입</h1>
       <form className="signup-form" onSubmit={handleSubmit}>
-        {/* 로그인 아이디 */}
-        <div className="form-group">
-          <label>로그인 아이디</label>
-          <input type="text" name="loginId" value={form.loginId} onChange={handleChange} />
-          {errors.loginId && <p className="error-text">{errors.loginId}</p>}
-          {form.loginId && !isUnique.loginId && <p className="error-text">중복된 아이디입니다.</p>}
-        </div>
+        <FormGroup
+          label="로그인 아이디"
+          type="text"
+          name="loginId"
+          value={form.loginId}
+          onChange={handleChange}
+        />
+        {errors.loginId && <p className="error-text">{errors.loginId}</p>}
+        {form.loginId && !isUnique.loginId && <p className="error-text">중복된 아이디입니다.</p>}
 
-        {/* 비밀번호 */}
-        <div className="form-group">
-          <label>비밀번호</label>
-          <input type="password" name="password" value={form.password} onChange={handleChange} />
-          {errors.password && <p className="error-text">{errors.password}</p>}
-        </div>
+        <FormGroup
+          label="비밀번호"
+          type="password"
+          name="password"
+          value={form.password}
+          onChange={handleChange}
+        />
+        {errors.password && <p className="error-text">{errors.password}</p>}
 
-        {/* 이메일 */}
-        <div className="form-group">
-          <label>이메일</label>
-          <input type="email" name="email" value={form.email} onChange={handleChange} />
-          {form.email && !isUnique.email && <p className="error-text">중복된 이메일입니다.</p>}
-        </div>
+        <FormGroup
+          label="이메일"
+          type="email"
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+        />
+        {form.email && !isUnique.email && <p className="error-text">중복된 이메일입니다.</p>}
 
-        {/* 닉네임 */}
-        <div className="form-group">
-          <label>닉네임</label>
-          <input type="text" name="nickname" value={form.nickname} onChange={handleChange} />
-          {errors.nickname && <p className="error-text">{errors.nickname}</p>}
-          {form.nickname && !isUnique.nickname && (
-            <p className="error-text">중복된 닉네임입니다.</p>
-          )}
-        </div>
+        <FormGroup
+          label="닉네임"
+          type="text"
+          name="nickname"
+          value={form.nickname}
+          onChange={handleChange}
+        />
+        {errors.nickname && <p className="error-text">{errors.nickname}</p>}
+        {form.nickname && !isUnique.nickname && <p className="error-text">중복된 닉네임입니다.</p>}
 
-        {/* 상태 메시지 */}
-        <div className="form-group">
-          <label>상태 메시지</label>
-          <input
-            type="text"
-            name="statusMessage"
-            value={form.statusMessage}
-            onChange={handleChange}
-          />
-        </div>
+        <FormGroup
+          label="상태 메시지"
+          type="text"
+          name="statusMessage"
+          value={form.statusMessage}
+          onChange={handleChange}
+        />
 
-        {/* 프로필 이미지 */}
         <div className="form-group">
           <label>프로필 이미지</label>
           <input type="file" accept="image/*" onChange={handleFileChange} />

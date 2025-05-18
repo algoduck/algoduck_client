@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import AxiosInstance from "../common/AxiosInstance";
 import LogoHeader from "../common/LogoHeader";
-import { Link } from "react-router-dom";
+import ProblemCard from "../components/ProblemCard";
+import Pagination from "../components/Pagination";
 
 const ProblemListPage = () => {
   const [problems, setProblems] = useState([]);
@@ -52,75 +53,18 @@ const ProblemListPage = () => {
         ) : (
           <ul style={{ listStyle: "none", padding: 0 }}>
             {problems.map((problem) => (
-              <li key={problem.problemId} style={{ marginBottom: "12px" }}>
-                <Link
-                  to={`/problems/${problem.problemId}`}
-                  style={{
-                    textDecoration: "none",
-                    color: "inherit"
-                  }}
-                >
-                  <div
-                    style={{
-                      border: "1px solid #ddd",
-                      borderRadius: "8px",
-                      padding: "16px",
-                      backgroundColor: "#f9f9f9",
-                      transition: "background-color 0.2s",
-                      cursor: "pointer"
-                    }}
-                    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
-                    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#f9f9f9")}
-                  >
-                    <div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "8px" }}>
-                      {problem.problemNumber}. {problem.title}
-                    </div>
-                    <div style={{ color: "#555" }}>난이도: {problem.difficulty}</div>
-                  </div>
-                </Link>
-              </li>
+              <ProblemCard key={problem.problemId} problem={problem} />
             ))}
           </ul>
         )}
       </div>
 
-      <div style={{ marginTop: "30px" }}>
-        <button
-          onClick={handlePrev}
-          disabled={pageNumber <= 1}
-          style={{
-            margin: "0 10px",
-            padding: "10px 20px",
-            fontSize: "16px",
-            borderRadius: "4px",
-            border: "1px solid #ccc",
-            cursor: pageNumber <= 1 ? "not-allowed" : "pointer",
-            backgroundColor: "#fff"
-          }}
-        >
-          ◀ 이전
-        </button>
-
-        <span style={{ fontSize: "16px", fontWeight: "bold" }}>
-          페이지 {pageNumber} / {totalPages}
-        </span>
-
-        <button
-          onClick={handleNext}
-          disabled={pageNumber >= totalPages}
-          style={{
-            margin: "0 10px",
-            padding: "10px 20px",
-            fontSize: "16px",
-            borderRadius: "4px",
-            border: "1px solid #ccc",
-            cursor: pageNumber >= totalPages ? "not-allowed" : "pointer",
-            backgroundColor: "#fff"
-          }}
-        >
-          다음 ▶
-        </button>
-      </div>
+      <Pagination
+        pageNumber={pageNumber}
+        totalPages={totalPages}
+        onPrev={handlePrev}
+        onNext={handleNext}
+      />
     </div>
   );
 };
