@@ -5,6 +5,7 @@ import LogoHeader from "../common/LogoHeader";
 import ProblemDetail from "../components/ProblemDetail";
 import CodeEditor from "../components/CodeEditor";
 import ResultBox from "../components/ResultBox";
+import TestcaseList from "../components/TestcaseList";
 
 const ProblemSolvePage = () => {
   const { problemId } = useParams();
@@ -16,6 +17,9 @@ const ProblemSolvePage = () => {
     const fetchProblem = async () => {
       try {
         const { data } = await AxiosInstance.get(`/problems/id/${problemId}`);
+
+        console.log("data =", data);
+
         if (data.success) setProblem(data.data);
         else alert("문제를 불러오는 데 실패했습니다.");
       } catch (err) {
@@ -38,8 +42,10 @@ const ProblemSolvePage = () => {
 
       <div style={{ display: "flex", gap: "30px" }}>
         {/* 문제 설명 */}
-        <ProblemDetail problem={problem} />
-
+        <div style={{ flex: 2 }}>
+          <ProblemDetail problem={problem} />
+          <TestcaseList testcases={problem.testcaseResponseDtoList} />
+        </div>
         {/* 코드 영역 */}
         <div
           style={{
