@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import duckImage from "../assets/duckling.png";
 import LogoHeader from "../common/LogoHeader";
+import AuthButtonGroup from "../components/AuthButtonGroup";
+import ProfileImage from "../components/ProfileImage";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -55,55 +57,20 @@ const MainPage = () => {
           <h2 style={{ marginBottom: "10px", color: "#4caf50", fontSize: "24px" }}>
             {nickname}님 환영합니다!
           </h2>
-          {profileImageUrl && (
-            <img
-              src={profileImageUrl}
-              alt="프로필"
-              style={{
-                width: "120px",
-                height: "120px",
-                borderRadius: "50%",
-                objectFit: "cover",
-                marginTop: "10px"
-              }}
-            />
-          )}
+          {profileImageUrl && <ProfileImage src={profileImageUrl} />}
           {statusMessage && (
             <p style={{ marginTop: "10px", fontSize: "18px", color: "#555" }}>{statusMessage}</p>
           )}
         </div>
       )}
 
+      <AuthButtonGroup
+        isLoggedIn={isLoggedIn}
+        onLogout={handleLogout}
+        onUpdate={handleUpdateProfile}
+      />
+
       <div style={{ marginTop: "30px" }}>
-        {isLoggedIn ? (
-          <>
-            <button
-              onClick={handleLogout}
-              style={{ margin: "10px", padding: "10px 20px", fontSize: "16px" }}
-            >
-              로그아웃
-            </button>
-            <button
-              onClick={handleUpdateProfile}
-              style={{ margin: "10px", padding: "10px 20px", fontSize: "16px" }}
-            >
-              회원 수정
-            </button>
-          </>
-        ) : (
-          <>
-            <Link to="/login">
-              <button style={{ margin: "10px", padding: "10px 20px", fontSize: "16px" }}>
-                로그인
-              </button>
-            </Link>
-            <Link to="/signup">
-              <button style={{ margin: "10px", padding: "10px 20px", fontSize: "16px" }}>
-                회원가입
-              </button>
-            </Link>
-          </>
-        )}
         <Link to="/ranking">
           <button style={{ margin: "10px", padding: "10px 20px", fontSize: "16px" }}>랭킹</button>
         </Link>

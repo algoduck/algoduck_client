@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AxiosInstance from "../common/AxiosInstance";
 import LogoHeader from "../common/LogoHeader";
+import ProblemDetail from "../components/ProblemDetail";
+import CodeEditor from "../components/CodeEditor";
+import ResultBox from "../components/ResultBox";
 
 const ProblemSolvePage = () => {
   const { problemId } = useParams();
   const [problem, setProblem] = useState(null);
+  const [code, setCode] = useState("");
+  const [result /* , setResult*/] = useState("실행 결과가 여기에 표시됩니다.");
 
   useEffect(() => {
     const fetchProblem = async () => {
@@ -33,24 +38,7 @@ const ProblemSolvePage = () => {
 
       <div style={{ display: "flex", gap: "30px" }}>
         {/* 문제 설명 */}
-        <div
-          style={{
-            flex: 2,
-            padding: "30px",
-            border: "2px solid #eee",
-            borderRadius: "16px",
-            backgroundColor: "#fafafa"
-          }}
-        >
-          <h3 style={{ marginBottom: "10px" }}>문제 설명</h3>
-          <p style={{ whiteSpace: "pre-line", lineHeight: "1.6" }}>{problem.description}</p>
-
-          <h3 style={{ marginTop: "30px", marginBottom: "10px" }}>입력</h3>
-          <p style={{ whiteSpace: "pre-line", lineHeight: "1.6" }}>{problem.inputDescription}</p>
-
-          <h3 style={{ marginTop: "30px", marginBottom: "10px" }}>출력</h3>
-          <p style={{ whiteSpace: "pre-line", lineHeight: "1.6" }}>{problem.outputDescription}</p>
-        </div>
+        <ProblemDetail problem={problem} />
 
         {/* 코드 영역 */}
         <div
@@ -61,35 +49,8 @@ const ProblemSolvePage = () => {
             gap: "20px"
           }}
         >
-          <textarea
-            placeholder="여기에 코드를 입력하세요..."
-            style={{
-              flex: 3,
-              width: "100%",
-              height: "400px",
-              padding: "16px",
-              fontSize: "16px",
-              fontFamily: "monospace",
-              borderRadius: "12px",
-              border: "1px solid #ccc",
-              resize: "vertical"
-            }}
-          />
-
-          <div
-            style={{
-              flex: 1,
-              border: "1px solid #ddd",
-              borderRadius: "12px",
-              padding: "16px",
-              backgroundColor: "#f9f9f9",
-              height: "150px",
-              overflowY: "auto"
-            }}
-          >
-            <h4 style={{ marginBottom: "8px" }}>실행 결과</h4>
-            <pre> 실행 결과가 여기에 표시됩니다.</pre>
-          </div>
+          <CodeEditor value={code} onChange={(e) => setCode(e.target.value)} />
+          <ResultBox result={result} />
         </div>
       </div>
     </div>

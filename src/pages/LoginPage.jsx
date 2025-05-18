@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./SignupPage.css"; // 로그인도 동일 스타일 사용
 import AxiosInstance from "../common/AxiosInstance";
 import LogoHeader from "../common/LogoHeader";
+import FormGroup from "../components/FormGroup";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -44,25 +45,23 @@ const LoginPage = () => {
       <LogoHeader />
       <h1 className="signup-title">로그인</h1>
       <form className="signup-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>아이디</label>
-          <input
-            type="text"
-            value={loginId}
-            onChange={(e) => setLoginId(e.target.value)}
-            required
-          />
-        </div>
+        <FormGroup
+          label="아이디"
+          type="text"
+          name="loginId"
+          value={loginId}
+          onChange={(e) => setLoginId(e.target.value)}
+          required
+        />
 
-        <div className="form-group">
-          <label>비밀번호</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+        <FormGroup
+          label="비밀번호"
+          type="password"
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
         {error && <p className="error-text">{error}</p>}
 

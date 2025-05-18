@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
 import AxiosInstance from "../common/AxiosInstance";
 import LogoHeader from "../common/LogoHeader";
+import FormGroup from "../components/FormGroup";
 
 const UpdateProfilePage = () => {
   const navigate = useNavigate();
@@ -117,36 +118,32 @@ const UpdateProfilePage = () => {
       <LogoHeader />
       <h1 className="signup-title">프로필 업데이트</h1>
       <form className="signup-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>로그인 아이디</label>
-          <input type="text" value={form.loginId} disabled />
-        </div>
-        <div className="form-group">
-          <label>이메일</label>
-          <input type="email" value={form.email} disabled />
-        </div>
-        <div className="form-group">
-          <label>닉네임</label>
-          <input type="text" value={form.nickname} disabled />
-        </div>
-        <div className="form-group">
-          <label>비밀번호</label>
-          <input type="password" name="password" value={form.password} onChange={handleChange} />
-          {errors.password && <p className="error-text">{errors.password}</p>}
-        </div>
-        <div className="form-group">
-          <label>상태 메시지</label>
-          <input
-            type="text"
-            name="statusMessage"
-            value={form.statusMessage}
-            onChange={handleChange}
-          />
-        </div>
+        <FormGroup label="로그인 아이디" type="text" value={form.loginId} disabled />
+        <FormGroup label="이메일" type="email" value={form.email} disabled />
+        <FormGroup label="닉네임" type="text" value={form.nickname} disabled />
+
+        <FormGroup
+          label="비밀번호"
+          type="password"
+          name="password"
+          value={form.password}
+          onChange={handleChange}
+        />
+        {errors.password && <p className="error-text">{errors.password}</p>}
+
+        <FormGroup
+          label="상태 메시지"
+          type="text"
+          name="statusMessage"
+          value={form.statusMessage}
+          onChange={handleChange}
+        />
+
         <div className="form-group">
           <label>프로필 이미지</label>
           <input type="file" accept="image/*" onChange={handleFileChange} />
         </div>
+
         <button type="submit" className="submit-button">
           프로필 업데이트
         </button>
