@@ -23,11 +23,15 @@ const LoginPage = () => {
 
       if (data.success) {
         const memberInfo = data.data;
-        localStorage.setItem("loginId", loginId);
-        localStorage.setItem("memberId", memberInfo.memberId);
-        localStorage.setItem("nickname", memberInfo.nickname);
-        localStorage.setItem("profileImageUrl", memberInfo.profileImageUrl || "");
-        localStorage.setItem("statusMessage", memberInfo.statusMessage || "");
+
+        console.log("memberInfo =", memberInfo);
+
+        // localStorage.setItem("loginId", loginId);
+        // localStorage.setItem("memberId", memberInfo.memberId);
+        // localStorage.setItem("nickname", memberInfo.nickname);
+        // localStorage.setItem("profileImageUrl", memberInfo.profileImageUrl || "");
+        // localStorage.setItem("statusMessage", memberInfo.statusMessage || "");
+        localStorage.setItem("member", JSON.stringify(memberInfo));
 
         alert("로그인 성공!");
         navigate("/");

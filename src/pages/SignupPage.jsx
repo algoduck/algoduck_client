@@ -130,11 +130,21 @@ const SignupPage = () => {
       });
 
       if (data.success) {
-        localStorage.setItem("loginId", form.loginId);
-        localStorage.setItem("memberId", data.data.memberId);
-        localStorage.setItem("nickname", data.data.nickname);
-        localStorage.setItem("profileImageUrl", data.data.profileImageUrl || "");
-        localStorage.setItem("statusMessage", data.data.statusMessage || "");
+        const member = {
+          loginId: form.loginId,
+          memberId: data.data.memberId,
+          nickname: data.data.nickname,
+          profileImageUrl: data.data.profileImageUrl,
+          statusMessage: data.data.statusMessage
+        };
+
+        // localStorage.setItem("loginId", form.loginId);
+        // localStorage.setItem("memberId", data.data.memberId);
+        // localStorage.setItem("nickname", data.data.nickname);
+        // localStorage.setItem("profileImageUrl", data.data.profileImageUrl || "");
+        // localStorage.setItem("statusMessage", data.data.statusMessage || "");
+
+        localStorage.setItem("member", JSON.stringify(member));
 
         alert("회원가입 및 로그인 성공!");
         navigate("/");

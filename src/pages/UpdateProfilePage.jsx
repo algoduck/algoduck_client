@@ -16,12 +16,17 @@ const UpdateProfilePage = () => {
   useEffect(() => {
     const fetchMemberInfo = async () => {
       try {
-        const memberId = localStorage.getItem("memberId");
-        if (!memberId) {
+        // const memberId = localStorage.getItem("memberId");
+        const memberJson = localStorage.getItem("member");
+        // if (!memberId) {
+        if (!memberJson) {
           alert("로그인이 필요합니다.");
           navigate("/login");
           return;
         }
+
+        const loginMember = JSON.parse(memberJson);
+        const memberId = loginMember.memberId;
 
         const { data } = await AxiosInstance.get(`/members/id/${memberId}`);
         if (data.success && data.data) {
@@ -74,9 +79,27 @@ const UpdateProfilePage = () => {
     if (!validatePolicy()) return;
 
     try {
+      const memberJson = localStorage.getItem("member");
+      // if (!memberId) {
+      if (!memberJson) {
+        alert("로그인이 필요합니다.");
+        navigate("/login");
+        return;
+      }
+
+      const member = JSON.parse(memberJson);
+      console.log("member = ", member);
+
       const formData = new FormData();
       const memberDataBlob = new Blob(
-        [JSON.stringify({ password: form.password, statusMessage: form.statusMessage })],
+        [
+          JSON.stringify({
+            loginId: form.loginId,
+            password: form.password,
+            statusMessage: form.statusMessage,
+            beforeProfileImageUrl: member.profileImageUrl
+          })
+        ],
         { type: "application/json" }
       );
 
@@ -85,17 +108,31 @@ const UpdateProfilePage = () => {
         formData.append("file", form.profileImage);
       }
 
+      console.log("formData =", formData);
+
       const { data } = await AxiosInstance.put(`/members/${form.memberId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
 
       if (data.success) {
-        localStorage.setItem("nickname", data.data.nickname);
-        localStorage.setItem(
-          "profileImageUrl",
-          data.data.profileImageUrl || form.profileImageUrl || ""
-        );
-        localStorage.setItem("statusMessage", data.data.statusMessage || "");
+        const memberJson = localStorage.getItem("member");
+
+        if (!memberJson) return;
+
+        const member = JSON.parse(memberJson);
+
+        member.nickname = data.data.nickname;
+        member.profileImageUrl = data.data.profileImageUrl || form.profileImageUrl || "";
+        member.statusMessage = data.data.statusMessage || "";
+
+        // localStorage.setItem("nickname", data.data.nickname);
+        // localStorage.setItem(
+        //   "profileImageUrl",
+        //   data.data.profileImageUrl || form.profileImageUrl || ""
+        // );
+        // localStorage.setItem("statusMessage", data.data.statusMessage || "");
+
+        localStorage.setItem("member", JSON.stringify(member));
 
         alert("프로필 업데이트가 완료되었습니다!");
         navigate("/");
