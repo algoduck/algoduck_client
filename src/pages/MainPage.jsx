@@ -13,12 +13,20 @@ const MainPage = () => {
   const [statusMessage, setStatusMessage] = useState("");
 
   useEffect(() => {
-    const loginId = localStorage.getItem("loginId");
-    const nickname = localStorage.getItem("nickname");
-    const profileImageUrl = localStorage.getItem("profileImageUrl");
-    const statusMessage = localStorage.getItem("statusMessage");
+    const memberJson = localStorage.getItem("member");
 
-    if (loginId) {
+    // const loginId = localStorage.getItem("loginId");
+    // const nickname = localStorage.getItem("nickname");
+    // const profileImageUrl = localStorage.getItem("profileImageUrl");
+    // const statusMessage = localStorage.getItem("statusMessage");
+
+    // if (loginId) {
+    if (memberJson) {
+      const member = JSON.parse(memberJson);
+      // const loginId = member.loginId;
+      const nickname = member.nickname;
+      const profileImageUrl = member.profileImageUrl;
+      const statusMessage = member.statusMessage;
       console.log("profileImageUrl = ", profileImageUrl);
 
       setIsLoggedIn(true);
