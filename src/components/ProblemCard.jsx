@@ -1,30 +1,15 @@
-// src/components/ProblemCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 
 const ProblemCard = ({ problem }) => {
   return (
-    <li style={{ marginBottom: "12px" }}>
-      <Link
-        to={`/problems/${problem.problemId}`}
-        style={{ textDecoration: "none", color: "inherit" }}
-      >
-        <div
-          style={{
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            padding: "16px",
-            backgroundColor: "#f9f9f9",
-            transition: "background-color 0.2s",
-            cursor: "pointer"
-          }}
-          onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
-          onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#f9f9f9")}
-        >
-          <div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "8px" }}>
+    <li className="mb-3">
+      <Link to={`/problems/${problem.problemId}`} className="no-underline text-inherit">
+        <div className="border border-gray-200 rounded-md p-4 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
+          <div className="font-semibold text-lg mb-2">
             {problem.problemNumber}. {problem.title}
           </div>
-          <div style={{ color: "#555" }}>난이도: {problem.difficulty}</div>
+          <div className="text-sm text-gray-600">난이도: {problem.difficulty}</div>
         </div>
       </Link>
     </li>

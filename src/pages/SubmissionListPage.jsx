@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import AxiosInstance from "../common/AxiosInstance";
-import SubmissionTable from "../components/submission/SubmissionTable";
+import SubmissionCard from "../components/submission/SubmissionCard";
 import SubmissionPagination from "../components/submission/SubmissionPagination";
+import LogoHeader from "../common/LogoHeader";
 
 const SubmissionListPage = () => {
   const [submissions, setSubmissions] = useState([]);
@@ -37,8 +38,13 @@ const SubmissionListPage = () => {
 
   return (
     <div className="p-6">
+      <LogoHeader />
       <h2 className="text-xl font-bold mb-4">채점 현황</h2>
-      <SubmissionTable submissions={submissions} />
+      <div className="grid gap-4">
+        {submissions.map((s) => (
+          <SubmissionCard key={s.submissionId} submission={s} />
+        ))}
+      </div>
       <SubmissionPagination
         hasNext={hasNext}
         hasPrev={hasPrev}

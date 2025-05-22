@@ -30,30 +30,25 @@ const MemberDetailPage = () => {
   if (!member) return null;
 
   return (
-    <div style={{ textAlign: "center", padding: "40px" }}>
+    <div className="max-w-xl mx-auto px-4 py-10 text-center">
       <LogoHeader />
+
       <button
         onClick={() => navigate("/ranking")}
-        style={{
-          marginBottom: "30px",
-          padding: "10px 20px",
-          fontSize: "14px",
-          borderRadius: "6px",
-          border: "1px solid #ccc",
-          backgroundColor: "#f0f0f0",
-          cursor: "pointer"
-        }}
+        className="mt-6 mb-10 px-4 py-2 text-sm border border-gray-300 rounded bg-gray-100 hover:bg-gray-200 transition"
       >
         ◀ 랭킹 페이지로
       </button>
 
-      <div>
+      <div className="bg-white border border-gray-200 rounded-md shadow p-6">
         <ProfileImage src={member.profileImageUrl} size={150} />
-        <h1 style={{ fontSize: "28px", fontWeight: "bold" }}>{member.nickname}</h1>
-        <p>아이디: {member.loginId}</p>
-        <p>이메일: {member.email}</p>
-        <p>푼 문제 수: {member.solved}</p>
-        <p>상태 메시지: {member.statusMessage}</p>
+
+        <h1 className="text-2xl font-bold mt-4 mb-2">{member.nickname}</h1>
+
+        <p className="text-gray-700 text-sm mb-1">아이디: {member.loginId}</p>
+        <p className="text-gray-700 text-sm mb-1">이메일: {member.email}</p>
+        <p className="text-gray-700 text-sm mb-1">푼 문제 수: {member.solved}</p>
+        <p className="text-gray-700 text-sm">상태 메시지: {member.statusMessage}</p>
       </div>
     </div>
   );
