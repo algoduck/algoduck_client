@@ -4,6 +4,8 @@
     "source.fixAll.eslint": "explicit"
   },
   "editor.formatOnSave": true,
+  "prettier.printWidth": 100,
+  "prettier.jsxSingleQuote": false,
   "eslint.validate": ["javascript", "javascriptreact"],
   "eslint.alwaysShowStatus": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode", // ✅ Prettier 확장 설치 필요
