@@ -6,7 +6,7 @@ const baseButtonClass =
 
 const AuthButtonGroup = ({ isLoggedIn, onLogout, onUpdate }) => {
   return (
-    <div className="mt-6 flex flex-wrap justify-center">
+    <div className="flex flex-wrap justify-center mt-6">
       {isLoggedIn ? (
         <>
           <button onClick={onLogout} className={baseButtonClass}>
