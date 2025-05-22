@@ -3,12 +3,15 @@ import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../common/AxiosInstance";
 import LogoHeader from "../common/LogoHeader";
 import FormGroup from "../components/FormGroup";
+import { useDispatch } from "react-redux";
+import { login } from "../store/slices/authSlice";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +26,8 @@ const LoginPage = () => {
       if (data.success) {
         localStorage.setItem("member", JSON.stringify(data.data));
         alert("로그인 성공!");
+        // 로그인 성공 시
+        dispatch(login(data.data));
         navigate("/");
       } else {
         setError(data.message || "아이디 또는 비밀번호가 올바르지 않습니다.");

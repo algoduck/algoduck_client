@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../common/AxiosInstance";
 import LogoHeader from "../common/LogoHeader";
 import FormGroup from "../components/FormGroup";
+import { useDispatch } from "react-redux";
+import { login } from "../store/slices/authSlice";
 
 const SignupPage = () => {
   const [form, setForm] = useState({
@@ -22,6 +24,8 @@ const SignupPage = () => {
   });
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const LOGIN_ID_POLICY = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
   const PASSWORD_POLICY =
@@ -139,6 +143,7 @@ const SignupPage = () => {
 
         localStorage.setItem("member", JSON.stringify(member));
         alert("회원가입 및 로그인 성공!");
+        dispatch(login(member));
         navigate("/");
       }
     } catch (error) {

@@ -12,7 +12,9 @@ const ProfileImage = ({ src, alt = "프로필", size = 120 }) => {
       src={src}
       alt={alt}
       style={dynamicStyle}
-      className={classNames("rounded-full object-cover mt-2 shadow-md border border-gray-200")}
+      className={classNames(
+        "mx-auto rounded-full object-cover mt-2 shadow-md border border-gray-200"
+      )}
     />
   );
 };

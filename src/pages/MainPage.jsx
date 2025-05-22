@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import duckImage from "../assets/duckling.png";
 import LogoHeader from "../common/LogoHeader";
-import AuthButtonGroup from "../components/AuthButtonGroup";
 import ProfileImage from "../components/ProfileImage";
 
 const MainPage = () => {
@@ -39,7 +38,7 @@ const MainPage = () => {
 
   return (
     <div className="px-4 mt-12 text-center">
-      <LogoHeader />
+      <LogoHeader isLoggedIn={isLoggedIn} onLogout={handleLogout} onUpdate={handleUpdateProfile} />
       <h1 className="mt-4 mb-6 text-4xl font-bold">알고오리</h1>
 
       <img src={duckImage} alt="오리" className="w-[320px] md:w-[525px] mx-auto my-8" />
@@ -51,12 +50,6 @@ const MainPage = () => {
           {statusMessage && <p className="mt-2 text-lg text-gray-600">{statusMessage}</p>}
         </div>
       )}
-
-      <AuthButtonGroup
-        isLoggedIn={isLoggedIn}
-        onLogout={handleLogout}
-        onUpdate={handleUpdateProfile}
-      />
 
       <div className="flex flex-wrap justify-center gap-4 mt-8">
         <Link to="/ranking">
