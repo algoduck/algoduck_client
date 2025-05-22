@@ -11,26 +11,21 @@ const ProblemSolvePage = () => {
   const { problemId } = useParams();
   const [problem, setProblem] = useState(null);
   const [code, setCode] = useState("");
-  const [result /* , setResult*/] = useState("실행 결과가 여기에 표시됩니다.");
+  const [result /* , setResult */] = useState("실행 결과가 여기에 표시됩니다.");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [memberId, setMemberId] = useState(null);
 
   useEffect(() => {
-    // 로그인 상태 확인 (예: localStorage 사용 시)
     const memberJson = localStorage.getItem("member");
-
-    console.log("memberJson = ", memberJson);
-
     if (memberJson) {
       const member = JSON.parse(memberJson);
       setIsLoggedIn(true);
-      setMemberId(member.memberId); // 또는 user.memberId
+      setMemberId(member.memberId);
     }
 
     const fetchProblem = async () => {
       try {
         const { data } = await AxiosInstance.get(`/problems/id/${problemId}`);
-
         if (data.success) setProblem(data.data);
         else alert("문제를 불러오는 데 실패했습니다.");
       } catch (err) {
@@ -50,17 +45,16 @@ const ProblemSolvePage = () => {
 
     try {
       const payload = {
-        memberId: memberId,
+        memberId,
         problemId: Number(problemId),
         sourceCode: code,
-        versionId: 1001 // Java 8
+        versionId: 1001
       };
 
       const { data } = await AxiosInstance.post("/submissions", payload);
       if (data.success) {
         alert("제출이 완료되었습니다!");
         console.log("제출 응답:", data.data);
-        // 추후 제출 결과 폴링 또는 리다이렉트 구현 가능
       } else {
         alert("제출에 실패했습니다.");
       }
@@ -70,48 +64,35 @@ const ProblemSolvePage = () => {
     }
   };
 
-  if (!problem) return <div style={{ textAlign: "center", marginTop: "100px" }}>로딩 중...</div>;
+  if (!problem) return <div className="mt-40 text-lg text-center text-gray-500">로딩 중...</div>;
 
   return (
-    <div style={{ maxWidth: "1300px", margin: "0 auto", padding: "40px" }}>
+    <div className="max-w-screen-xl px-4 py-10 mx-auto">
       <LogoHeader />
-      <h1 style={{ textAlign: "center", fontSize: "36px", marginBottom: "40px" }}>
+      <h1 className="mb-10 text-3xl font-bold text-center">
         {problem.problemNumber}. {problem.title}
       </h1>
 
-      <div style={{ display: "flex", gap: "30px" }}>
-        {/* 문제 설명 */}
-        <div style={{ flex: 2 }}>
+      <div className="flex flex-col gap-8 lg:flex-row">
+        {/* 문제 설명 + 테스트케이스 */}
+        <div className="flex-1">
           <ProblemDetail problem={problem} />
           <TestcaseList testcases={problem.testcaseResponseDtoList} />
         </div>
 
-        {/* 코드 영역 */}
-        <div
-          style={{
-            flex: 3,
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px"
-          }}
-        >
+        {/* 코드 작성 영역 */}
+        <div className="flex-[1.5] flex flex-col gap-4">
           <CodeEditor value={code} onChange={(e) => setCode(e.target.value)} />
           <ResultBox result={result} />
 
-          {/* 제출 버튼 */}
           <button
             onClick={handleSubmit}
             disabled={!isLoggedIn}
-            style={{
-              padding: "12px 24px",
-              fontSize: "16px",
-              backgroundColor: isLoggedIn ? "#4CAF50" : "#ccc",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: isLoggedIn ? "pointer" : "not-allowed",
-              alignSelf: "flex-start"
-            }}
+            className={`self-start px-6 py-3 text-sm font-semibold rounded transition ${
+              isLoggedIn
+                ? "bg-green-500 hover:bg-green-600 text-white"
+                : "bg-gray-300 text-white cursor-not-allowed"
+            }`}
           >
             제출하기
           </button>

@@ -1,4 +1,3 @@
-// src/components/Pagination.jsx
 import React from "react";
 
 const Pagination = ({ pageNumber, totalPages, onPageChange }) => {
@@ -16,37 +15,37 @@ const Pagination = ({ pageNumber, totalPages, onPageChange }) => {
   };
 
   return (
-    <div
-      style={{
-        marginTop: "30px",
-        display: "flex",
-        justifyContent: "center",
-        flexWrap: "wrap",
-        gap: "8px"
-      }}
-    >
-      {pageNumber > 1 && <button onClick={() => onPageChange(pageNumber - 1)}>&lt;</button>}
+    <div className="mt-8 flex justify-center flex-wrap gap-2">
+      {pageNumber > 1 && (
+        <button
+          onClick={() => onPageChange(pageNumber - 1)}
+          className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 transition"
+        >
+          &lt;
+        </button>
+      )}
 
       {generatePageNumbers().map((page) => (
         <button
           key={page}
           onClick={() => onPageChange(page)}
-          style={{
-            padding: "8px 14px",
-            fontWeight: page === pageNumber ? "bold" : "normal",
-            backgroundColor: page === pageNumber ? "#4caf50" : "#fff",
-            color: page === pageNumber ? "#fff" : "#000",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            cursor: "pointer"
-          }}
+          className={`px-4 py-1 border rounded transition font-medium ${
+            page === pageNumber
+              ? "bg-green-500 text-white border-green-500"
+              : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+          }`}
         >
           {page}
         </button>
       ))}
 
       {pageNumber < totalPages && (
-        <button onClick={() => onPageChange(pageNumber + 1)}>&gt;</button>
+        <button
+          onClick={() => onPageChange(pageNumber + 1)}
+          className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 transition"
+        >
+          &gt;
+        </button>
       )}
     </div>
   );

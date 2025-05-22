@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./SignupPage.css";
 import AxiosInstance from "../common/AxiosInstance";
 import LogoHeader from "../common/LogoHeader";
 import FormGroup from "../components/FormGroup";
@@ -15,19 +14,17 @@ const UpdateProfilePage = () => {
 
   useEffect(() => {
     const fetchMemberInfo = async () => {
+      const memberJson = localStorage.getItem("member");
+      if (!memberJson) {
+        alert("로그인이 필요합니다.");
+        navigate("/login");
+        return;
+      }
+
+      const loginMember = JSON.parse(memberJson);
+      const memberId = loginMember.memberId;
+
       try {
-        // const memberId = localStorage.getItem("memberId");
-        const memberJson = localStorage.getItem("member");
-        // if (!memberId) {
-        if (!memberJson) {
-          alert("로그인이 필요합니다.");
-          navigate("/login");
-          return;
-        }
-
-        const loginMember = JSON.parse(memberJson);
-        const memberId = loginMember.memberId;
-
         const { data } = await AxiosInstance.get(`/members/id/${memberId}`);
         if (data.success && data.data) {
           const member = data.data;
@@ -78,18 +75,16 @@ const UpdateProfilePage = () => {
     e.preventDefault();
     if (!validatePolicy()) return;
 
+    const memberJson = localStorage.getItem("member");
+    if (!memberJson) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
+
+    const member = JSON.parse(memberJson);
+
     try {
-      const memberJson = localStorage.getItem("member");
-      // if (!memberId) {
-      if (!memberJson) {
-        alert("로그인이 필요합니다.");
-        navigate("/login");
-        return;
-      }
-
-      const member = JSON.parse(memberJson);
-      console.log("member = ", member);
-
       const formData = new FormData();
       const memberDataBlob = new Blob(
         [
@@ -108,30 +103,14 @@ const UpdateProfilePage = () => {
         formData.append("file", form.profileImage);
       }
 
-      console.log("formData =", formData);
-
       const { data } = await AxiosInstance.put(`/members/${form.memberId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
 
       if (data.success) {
-        const memberJson = localStorage.getItem("member");
-
-        if (!memberJson) return;
-
-        const member = JSON.parse(memberJson);
-
         member.nickname = data.data.nickname;
         member.profileImageUrl = data.data.profileImageUrl || form.profileImageUrl || "";
         member.statusMessage = data.data.statusMessage || "";
-
-        // localStorage.setItem("nickname", data.data.nickname);
-        // localStorage.setItem(
-        //   "profileImageUrl",
-        //   data.data.profileImageUrl || form.profileImageUrl || ""
-        // );
-        // localStorage.setItem("statusMessage", data.data.statusMessage || "");
-
         localStorage.setItem("member", JSON.stringify(member));
 
         alert("프로필 업데이트가 완료되었습니다!");
@@ -147,14 +126,14 @@ const UpdateProfilePage = () => {
   };
 
   if (!form) {
-    return <div style={{ textAlign: "center", marginTop: "100px" }}>로딩 중...</div>;
+    return <div className="mt-40 text-lg text-center text-gray-500">로딩 중...</div>;
   }
 
   return (
-    <div className="signup-container">
+    <div className="flex flex-col items-center justify-center min-h-screen px-4 py-10 bg-gray-50">
       <LogoHeader />
-      <h1 className="signup-title">프로필 업데이트</h1>
-      <form className="signup-form" onSubmit={handleSubmit}>
+      <h1 className="mt-6 mb-8 text-2xl font-bold">프로필 업데이트</h1>
+      <form onSubmit={handleSubmit} className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
         <FormGroup label="로그인 아이디" type="text" value={form.loginId} disabled />
         <FormGroup label="이메일" type="email" value={form.email} disabled />
         <FormGroup label="닉네임" type="text" value={form.nickname} disabled />
@@ -166,7 +145,7 @@ const UpdateProfilePage = () => {
           value={form.password}
           onChange={handleChange}
         />
-        {errors.password && <p className="error-text">{errors.password}</p>}
+        {errors.password && <p className="mb-2 text-sm text-red-500">{errors.password}</p>}
 
         <FormGroup
           label="상태 메시지"
@@ -176,12 +155,15 @@ const UpdateProfilePage = () => {
           onChange={handleChange}
         />
 
-        <div className="form-group">
-          <label>프로필 이미지</label>
-          <input type="file" accept="image/*" onChange={handleFileChange} />
+        <div className="mb-4">
+          <label className="block mb-1 text-sm font-medium text-gray-700">프로필 이미지</label>
+          <input type="file" accept="image/*" onChange={handleFileChange} className="text-sm" />
         </div>
 
-        <button type="submit" className="submit-button">
+        <button
+          type="submit"
+          className="w-full py-2 mt-4 font-semibold text-white transition bg-blue-500 rounded hover:bg-blue-600"
+        >
           프로필 업데이트
         </button>
       </form>

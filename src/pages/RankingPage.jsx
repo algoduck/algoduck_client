@@ -24,17 +24,17 @@ const RankingPage = () => {
   const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
-    <div style={{ textAlign: "center", padding: "40px" }}>
+    <div className="px-4 py-10 text-center">
       <LogoHeader />
-      <h1 style={{ fontSize: "36px", marginBottom: "30px" }}>🏆 랭킹</h1>
+      <h1 className="mb-8 text-3xl font-bold">🏆 랭킹</h1>
 
-      <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "left" }}>
+      <div className="max-w-3xl mx-auto text-left">
         {isLoading ? (
-          <p style={{ textAlign: "center" }}>로딩 중...</p>
+          <p className="text-center text-gray-500">로딩 중...</p>
         ) : members.length === 0 ? (
-          <p style={{ textAlign: "center" }}>회원이 없습니다.</p>
+          <p className="text-center text-gray-500">회원이 없습니다.</p>
         ) : (
-          <ul style={{ listStyle: "none", padding: 0 }}>
+          <ul className="p-0 list-none">
             {members
               .sort((a, b) => b.solved - a.solved)
               .map((member, index) => (

@@ -24,17 +24,17 @@ const ProblemListPage = () => {
   const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
-    <div style={{ textAlign: "center", padding: "40px" }}>
+    <div className="px-4 py-10 text-center">
       <LogoHeader />
-      <h1 style={{ fontSize: "36px", marginBottom: "40px" }}>📚 문제 </h1>
+      <h1 className="my-8 text-3xl font-bold">📚 문제</h1>
 
-      <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "left" }}>
+      <div className="max-w-3xl mx-auto text-left">
         {isLoading ? (
-          <p style={{ textAlign: "center" }}>로딩 중...</p>
+          <p className="text-center text-gray-500">로딩 중...</p>
         ) : problems.length === 0 ? (
-          <p style={{ textAlign: "center" }}>문제가 없습니다.</p>
+          <p className="text-center text-gray-500">문제가 없습니다.</p>
         ) : (
-          <ul style={{ listStyle: "none", padding: 0 }}>
+          <ul className="p-0 list-none">
             {problems.map((problem) => (
               <ProblemCard key={problem.problemId} problem={problem} />
             ))}

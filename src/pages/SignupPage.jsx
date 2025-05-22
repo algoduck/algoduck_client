@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./SignupPage.css";
 import AxiosInstance from "../common/AxiosInstance";
 import LogoHeader from "../common/LogoHeader";
 import FormGroup from "../components/FormGroup";
@@ -22,12 +21,12 @@ const SignupPage = () => {
     nickname: true
   });
 
+  const navigate = useNavigate();
+
   const LOGIN_ID_POLICY = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
   const PASSWORD_POLICY =
     /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!]{8,20}$/;
   const NICKNAME_POLICY = /^[A-Za-z가-힣\d]{3,10}$/;
-
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,20 +59,22 @@ const SignupPage = () => {
 
   const checkLoginId = async (loginId) => {
     try {
-      const { data } = await AxiosInstance.get("/members/exists/login-id", { params: { loginId } });
+      const { data } = await AxiosInstance.get("/members/exists/login-id", {
+        params: { loginId }
+      });
       setIsUnique((prev) => ({ ...prev, loginId: data.data }));
-    } catch (error) {
-      console.error(error);
+    } catch {
       setIsUnique((prev) => ({ ...prev, loginId: true }));
     }
   };
 
   const checkEmail = async (email) => {
     try {
-      const { data } = await AxiosInstance.get("/members/exists/email", { params: { email } });
+      const { data } = await AxiosInstance.get("/members/exists/email", {
+        params: { email }
+      });
       setIsUnique((prev) => ({ ...prev, email: data.data }));
-    } catch (error) {
-      console.error(error);
+    } catch {
       setIsUnique((prev) => ({ ...prev, email: true }));
     }
   };
@@ -84,8 +85,7 @@ const SignupPage = () => {
         params: { nickname }
       });
       setIsUnique((prev) => ({ ...prev, nickname: data.data }));
-    } catch (error) {
-      console.error(error);
+    } catch {
       setIsUnique((prev) => ({ ...prev, nickname: true }));
     }
   };
@@ -93,7 +93,6 @@ const SignupPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validatePolicy()) return;
-
     if (!isUnique.loginId || !isUnique.email || !isUnique.nickname) {
       alert("중복된 정보가 있습니다.");
       return;
@@ -138,14 +137,7 @@ const SignupPage = () => {
           statusMessage: data.data.statusMessage
         };
 
-        // localStorage.setItem("loginId", form.loginId);
-        // localStorage.setItem("memberId", data.data.memberId);
-        // localStorage.setItem("nickname", data.data.nickname);
-        // localStorage.setItem("profileImageUrl", data.data.profileImageUrl || "");
-        // localStorage.setItem("statusMessage", data.data.statusMessage || "");
-
         localStorage.setItem("member", JSON.stringify(member));
-
         alert("회원가입 및 로그인 성공!");
         navigate("/");
       }
@@ -156,10 +148,10 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="signup-container">
+    <div className="flex flex-col items-center justify-center min-h-screen px-4 py-10 bg-gray-50">
       <LogoHeader />
-      <h1 className="signup-title">회원가입</h1>
-      <form className="signup-form" onSubmit={handleSubmit}>
+      <h1 className="mt-6 mb-8 text-2xl font-bold">회원가입</h1>
+      <form onSubmit={handleSubmit} className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
         <FormGroup
           label="로그인 아이디"
           type="text"
@@ -167,8 +159,10 @@ const SignupPage = () => {
           value={form.loginId}
           onChange={handleChange}
         />
-        {errors.loginId && <p className="error-text">{errors.loginId}</p>}
-        {form.loginId && !isUnique.loginId && <p className="error-text">중복된 아이디입니다.</p>}
+        {errors.loginId && <p className="mb-2 text-sm text-red-500">{errors.loginId}</p>}
+        {form.loginId && !isUnique.loginId && (
+          <p className="mb-2 text-sm text-red-500">중복된 아이디입니다.</p>
+        )}
 
         <FormGroup
           label="비밀번호"
@@ -177,7 +171,7 @@ const SignupPage = () => {
           value={form.password}
           onChange={handleChange}
         />
-        {errors.password && <p className="error-text">{errors.password}</p>}
+        {errors.password && <p className="mb-2 text-sm text-red-500">{errors.password}</p>}
 
         <FormGroup
           label="이메일"
@@ -186,7 +180,9 @@ const SignupPage = () => {
           value={form.email}
           onChange={handleChange}
         />
-        {form.email && !isUnique.email && <p className="error-text">중복된 이메일입니다.</p>}
+        {form.email && !isUnique.email && (
+          <p className="mb-2 text-sm text-red-500">중복된 이메일입니다.</p>
+        )}
 
         <FormGroup
           label="닉네임"
@@ -195,8 +191,10 @@ const SignupPage = () => {
           value={form.nickname}
           onChange={handleChange}
         />
-        {errors.nickname && <p className="error-text">{errors.nickname}</p>}
-        {form.nickname && !isUnique.nickname && <p className="error-text">중복된 닉네임입니다.</p>}
+        {errors.nickname && <p className="mb-2 text-sm text-red-500">{errors.nickname}</p>}
+        {form.nickname && !isUnique.nickname && (
+          <p className="mb-2 text-sm text-red-500">중복된 닉네임입니다.</p>
+        )}
 
         <FormGroup
           label="상태 메시지"
@@ -206,12 +204,15 @@ const SignupPage = () => {
           onChange={handleChange}
         />
 
-        <div className="form-group">
-          <label>프로필 이미지</label>
-          <input type="file" accept="image/*" onChange={handleFileChange} />
+        <div className="mb-4">
+          <label className="block mb-1 text-sm font-medium text-gray-700">프로필 이미지</label>
+          <input type="file" accept="image/*" onChange={handleFileChange} className="text-sm" />
         </div>
 
-        <button type="submit" className="submit-button">
+        <button
+          type="submit"
+          className="w-full py-2 mt-4 font-semibold text-white transition bg-blue-500 rounded hover:bg-blue-600"
+        >
           회원가입
         </button>
       </form>

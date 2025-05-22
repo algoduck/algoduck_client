@@ -1,4 +1,3 @@
-// src/components/CodeEditor.jsx
 import React from "react";
 
 const CodeEditor = ({ value, onChange }) => {
@@ -7,17 +6,7 @@ const CodeEditor = ({ value, onChange }) => {
       placeholder="여기에 코드를 입력하세요..."
       value={value}
       onChange={onChange}
-      style={{
-        flex: 3,
-        width: "100%",
-        height: "400px",
-        padding: "16px",
-        fontSize: "16px",
-        fontFamily: "monospace",
-        borderRadius: "12px",
-        border: "1px solid #ccc",
-        resize: "vertical"
-      }}
+      className="w-full h-[400px] p-4 text-sm font-mono rounded-xl border border-gray-300 resize-y focus:outline-none focus:ring-2 focus:ring-blue-400"
     />
   );
 };
