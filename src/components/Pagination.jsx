@@ -15,23 +15,22 @@ const Pagination = ({ pageNumber, totalPages, onPageChange }) => {
   };
 
   return (
-    <div className="mt-8 flex justify-center flex-wrap gap-2">
-      {pageNumber > 1 && (
-        <button
-          onClick={() => onPageChange(pageNumber - 1)}
-          className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 transition"
-        >
-          &lt;
-        </button>
-      )}
+    <div className="flex flex-wrap justify-center gap-2 mt-8">
+      <button
+        onClick={() => onPageChange(pageNumber - 1)}
+        disabled={pageNumber === 1}
+        className="px-3 py-2 text-sm transition bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        ◀ 이전
+      </button>
 
       {generatePageNumbers().map((page) => (
         <button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`px-4 py-1 border rounded transition font-medium ${
+          className={`px-4 py-2 text-sm rounded font-medium border transition ${
             page === pageNumber
-              ? "bg-green-500 text-white border-green-500"
+              ? "bg-blue-500 text-white border-blue-500"
               : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
           }`}
         >
@@ -39,14 +38,13 @@ const Pagination = ({ pageNumber, totalPages, onPageChange }) => {
         </button>
       ))}
 
-      {pageNumber < totalPages && (
-        <button
-          onClick={() => onPageChange(pageNumber + 1)}
-          className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 transition"
-        >
-          &gt;
-        </button>
-      )}
+      <button
+        onClick={() => onPageChange(pageNumber + 1)}
+        disabled={pageNumber === totalPages}
+        className="px-3 py-2 text-sm transition bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        다음 ▶
+      </button>
     </div>
   );
 };

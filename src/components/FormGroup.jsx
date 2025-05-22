@@ -3,7 +3,7 @@ import React from "react";
 const FormGroup = ({ label, type, name, value, onChange, required = false, disabled = false }) => {
   return (
     <div className="mb-4 text-left">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+      <label htmlFor={name} className="block mb-1 text-sm font-medium text-gray-700">
         {label}
       </label>
       <input

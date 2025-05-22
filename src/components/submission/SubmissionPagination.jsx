@@ -6,14 +6,14 @@ const SubmissionPagination = ({ hasNext, hasPrev, onNext, onPrev }) => {
       <button
         onClick={onPrev}
         disabled={!hasPrev}
-        className="px-4 py-2 text-gray-800 transition bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-4 py-2 text-sm text-gray-800 transition bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         ◀ 이전
       </button>
       <button
         onClick={onNext}
         disabled={!hasNext}
-        className="px-4 py-2 text-white transition bg-blue-500 rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-4 py-2 text-sm text-white transition bg-blue-500 border border-blue-500 rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         다음 ▶
       </button>
