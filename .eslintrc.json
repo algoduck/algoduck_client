@@ -18,7 +18,7 @@
     "require-jsdoc": "off",
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off", // ✅ React 자동 runtime인 경우 끄기
-    "max-len": ["warn", { "code": 120 }],
+    "max-len": "off",
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
     "object-curly-spacing": ["error", "always"]
