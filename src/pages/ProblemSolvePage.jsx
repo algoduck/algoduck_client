@@ -6,6 +6,7 @@ import ProblemDetail from "../components/ProblemDetail";
 import CodeEditor from "../components/CodeEditor";
 import ResultBox from "../components/ResultBox";
 import TestcaseList from "../components/TestcaseList";
+import useSessionValidationBeforeAction from "../hooks/useSessionValidationBeforeAction";
 
 const ProblemSolvePage = () => {
   const { problemId } = useParams();
@@ -14,6 +15,8 @@ const ProblemSolvePage = () => {
   const [result /* , setResult */] = useState("실행 결과가 여기에 표시됩니다.");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [memberId, setMemberId] = useState(null);
+
+  const validateSession = useSessionValidationBeforeAction();
 
   useEffect(() => {
     const memberJson = localStorage.getItem("member");
@@ -38,6 +41,9 @@ const ProblemSolvePage = () => {
   }, [problemId]);
 
   const handleSubmit = async () => {
+    const isValid = await validateSession();
+    if (!isValid) return;
+
     if (!isLoggedIn || !memberId) {
       alert("로그인 후 제출할 수 있습니다.");
       return;

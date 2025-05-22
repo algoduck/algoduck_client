@@ -17,6 +17,7 @@ const LogoHeader = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    window.location.reload();
     // navigate("/");
   };
 

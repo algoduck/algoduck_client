@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../common/AxiosInstance";
 import LogoHeader from "../common/LogoHeader";
 import FormGroup from "../components/FormGroup";
+import useSessionGuard from "../hooks/useSessionGuard";
 
 const UpdateProfilePage = () => {
   const navigate = useNavigate();
@@ -11,6 +12,8 @@ const UpdateProfilePage = () => {
 
   const PASSWORD_POLICY =
     /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!]{8,20}$/;
+
+  useSessionGuard();
 
   useEffect(() => {
     const fetchMemberInfo = async () => {
