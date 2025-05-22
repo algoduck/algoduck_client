@@ -9,6 +9,7 @@ import ProblemListPage from "./pages/ProblemListPage";
 import ProblemSolvePage from "./pages/ProblemSolvePage";
 import RankingPage from "./pages/RankingPage";
 import MemberDetailPage from "./pages/MemberDetailPage";
+import SubmissionListPage from "./pages/SubmissionListPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/problems/:problemId" element={<ProblemSolvePage />} />
         <Route path="/ranking" element={<RankingPage />} />
         <Route path="/members/:memberId" element={<MemberDetailPage />} />
+        <Route path="/submissions" element={<SubmissionListPage />} />
       </Routes>
     </Router>
   );

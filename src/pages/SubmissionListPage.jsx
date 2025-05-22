@@ -1,0 +1,52 @@
+import React, { useEffect, useState } from "react";
+import AxiosInstance from "../common/AxiosInstance";
+import SubmissionTable from "../components/submission/SubmissionTable";
+import SubmissionPagination from "../components/submission/SubmissionPagination";
+
+const SubmissionListPage = () => {
+  const [submissions, setSubmissions] = useState([]);
+  const [hasNext, setHasNext] = useState(false);
+  const [hasPrev, setHasPrev] = useState(false);
+  const [firstSeenId, setFirstSeenId] = useState(null);
+  const [lastSeenId, setLastSeenId] = useState(null);
+  const size = 20;
+
+  const fetchSubmissions = async (params = {}) => {
+    try {
+      const response = await AxiosInstance.get("/submissions/page", { params });
+      const { content, hasNext, hasPrev } = response.data.data;
+
+      console.log(content);
+
+      setSubmissions(content);
+      setHasNext(hasNext);
+      setHasPrev(hasPrev);
+
+      if (content.length > 0) {
+        setFirstSeenId(content[0].submissionId);
+        setLastSeenId(content[content.length - 1].submissionId);
+      }
+    } catch (error) {
+      console.error("Failed to fetch submissions:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSubmissions();
+  }, []);
+
+  return (
+    <div className="p-6">
+      <h2 className="text-xl font-bold mb-4">채점 현황</h2>
+      <SubmissionTable submissions={submissions} />
+      <SubmissionPagination
+        hasNext={hasNext}
+        hasPrev={hasPrev}
+        onNext={() => fetchSubmissions({ lastSeenId, size })}
+        onPrev={() => fetchSubmissions({ firstSeenId, size })}
+      />
+    </div>
+  );
+};
+
+export default SubmissionListPage;

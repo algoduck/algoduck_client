@@ -86,6 +86,10 @@ const MainPage = () => {
         <Link to="/problems">
           <button style={{ margin: "10px", padding: "10px 20px", fontSize: "16px" }}>문제</button>
         </Link>
+
+        <Link to="/submissions">
+          <button style={{ padding: "10px 20px", fontSize: "16px" }}>채점 현황</button>
+        </Link>
       </div>
     </div>
   );
