@@ -39,7 +39,7 @@ const SubmissionListPage = () => {
   return (
     <div className="p-6">
       <LogoHeader />
-      <h2 className="text-xl font-bold mb-4">채점 현황</h2>
+      <h2 className="mb-4 text-xl font-bold">채점 현황</h2>
       <div className="grid gap-4">
         {submissions.map((s) => (
           <SubmissionCard key={s.submissionId} submission={s} />
@@ -48,8 +48,8 @@ const SubmissionListPage = () => {
       <SubmissionPagination
         hasNext={hasNext}
         hasPrev={hasPrev}
-        onNext={() => fetchSubmissions({ lastSeenId, size })}
-        onPrev={() => fetchSubmissions({ firstSeenId, size })}
+        onNext={() => fetchSubmissions({ lastSeenId, size: size + 1 })}
+        onPrev={() => fetchSubmissions({ firstSeenId, size: size + 1 })}
       />
     </div>
   );

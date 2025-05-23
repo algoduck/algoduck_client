@@ -7,6 +7,7 @@ import CodeEditor from "../components/CodeEditor";
 import ResultBox from "../components/ResultBox";
 import TestcaseList from "../components/TestcaseList";
 import useSessionValidationBeforeAction from "../hooks/useSessionValidationBeforeAction";
+import { useNavigate } from "react-router-dom";
 
 const ProblemSolvePage = () => {
   const { problemId } = useParams();
@@ -17,6 +18,7 @@ const ProblemSolvePage = () => {
   const [memberId, setMemberId] = useState(null);
 
   const validateSession = useSessionValidationBeforeAction();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const memberJson = localStorage.getItem("member");
@@ -59,7 +61,8 @@ const ProblemSolvePage = () => {
 
       const { data } = await AxiosInstance.post("/submissions", payload);
       if (data.success) {
-        alert("제출이 완료되었습니다!");
+        // alert("제출이 완료되었습니다!");
+        navigate("/submissions");
         console.log("제출 응답:", data.data);
       } else {
         alert("제출에 실패했습니다.");
