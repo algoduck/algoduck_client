@@ -17,22 +17,11 @@ const UpdateProfilePage = () => {
 
   useEffect(() => {
     const fetchMemberInfo = async () => {
-      const memberJson = localStorage.getItem("member");
-      if (!memberJson) {
-        alert("로그인이 필요합니다.");
-        navigate("/login");
-        return;
-      }
-
-      const loginMember = JSON.parse(memberJson);
-      const memberId = loginMember.memberId;
-
       try {
-        const { data } = await AxiosInstance.get(`/members/id/${memberId}`);
+        const { data } = await AxiosInstance.get("/members/me");
         if (data.success && data.data) {
           const member = data.data;
           setForm({
-            memberId: member.memberId,
             loginId: member.loginId,
             email: member.email,
             nickname: member.nickname,
@@ -76,16 +65,8 @@ const UpdateProfilePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("제출 시작");
     if (!validatePolicy()) return;
-
-    const memberJson = localStorage.getItem("member");
-    if (!memberJson) {
-      alert("로그인이 필요합니다.");
-      navigate("/login");
-      return;
-    }
-
-    const member = JSON.parse(memberJson);
 
     try {
       const formData = new FormData();
@@ -95,7 +76,7 @@ const UpdateProfilePage = () => {
             loginId: form.loginId,
             password: form.password,
             statusMessage: form.statusMessage,
-            beforeProfileImageUrl: member.profileImageUrl
+            beforeProfileImageUrl: form.profileImageUrl
           })
         ],
         { type: "application/json" }
@@ -106,16 +87,11 @@ const UpdateProfilePage = () => {
         formData.append("file", form.profileImage);
       }
 
-      const { data } = await AxiosInstance.put(`/members/${form.memberId}`, formData, {
+      const { data } = await AxiosInstance.put("/members", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
 
       if (data.success) {
-        member.nickname = data.data.nickname;
-        member.profileImageUrl = data.data.profileImageUrl || form.profileImageUrl || "";
-        member.statusMessage = data.data.statusMessage || "";
-        localStorage.setItem("member", JSON.stringify(member));
-
         alert("프로필 업데이트가 완료되었습니다!");
         navigate("/");
         window.location.reload();
@@ -123,6 +99,7 @@ const UpdateProfilePage = () => {
         alert("업데이트에 실패했습니다.");
       }
     } catch (error) {
+      console.log("error = ", error);
       console.error(error);
       alert("프로필 업데이트에 실패했습니다.");
     }
