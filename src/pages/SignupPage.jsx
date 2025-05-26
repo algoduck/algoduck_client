@@ -43,6 +43,16 @@ const SignupPage = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+
+    const maxSizeInMB = 1;
+    const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+
+    if (file.size > maxSizeInBytes) {
+      alert("파일 용량이 1MB를 초과합니다. 다른 이미지를 선택해주세요.");
+      e.target.value = null; // 선택된 파일 초기화
+      return;
+    }
+
     setForm((prev) => ({ ...prev, profileImage: file }));
   };
 
