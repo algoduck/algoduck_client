@@ -33,8 +33,11 @@ const LoginPage = () => {
         setError(data.message || "아이디 또는 비밀번호가 올바르지 않습니다.");
       }
     } catch (err) {
-      console.error(err);
-      setError("서버 오류로 로그인에 실패했습니다.");
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+      } else {
+        setError("서버 오류로 로그인에 실패했습니다.");
+      }
     }
   };
 

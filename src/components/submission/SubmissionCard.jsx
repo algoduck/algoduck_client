@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const getStatusStyle = (status) => {
   switch (status) {
@@ -19,31 +20,44 @@ const SubmissionCard = ({ submission }) => {
   const {
     submissionId,
     nickname,
+    memberId,
     problemId,
     problemTitle,
     message,
     executionTime,
     memoryUsage,
-    codeName
+    codeName,
+    status
   } = submission;
 
+  console.log("submission = ", submission);
+
   return (
-    <div className="p-6 transition bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md">
+    <div className="px-6 py-4 transition bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md">
+      {/* 상단: 제출번호 + 결과 메시지 */}
       <div className="flex items-center justify-between mb-2 text-sm text-gray-500">
         <span>제출 #{submissionId}</span>
-        <span className={getStatusStyle(submission.status)}>{message}</span>
+        <span className={getStatusStyle(status)}>{message}</span>
       </div>
 
-      <div className="mb-1 text-lg font-semibold text-gray-800">
+      {/* 문제 번호와 제목 */}
+      <Link
+        to={`/problems/${problemId}`}
+        className="block mb-1 text-lg font-bold text-gray-900 hover:underline"
+      >
         {problemId}. {problemTitle}
-      </div>
+      </Link>
 
-      <div className="mb-2 text-sm text-gray-600">제출자: {nickname}</div>
+      {/* 제출자 */}
+      <Link to={`/members/${memberId}`} className="mb-3 text-sm text-gray-500 hover:underline">
+        제출자: {nickname}
+      </Link>
 
+      {/* 시간, 메모리, 언어 */}
       <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-        <span>⏱ 시간: {executionTime ?? "-"} ms</span>
-        <span>💾 메모리: {memoryUsage ?? "-"} KB</span>
-        <span>💻 언어: {codeName}</span>
+        <span>⏱ {executionTime ?? "-"} ms</span>
+        <span>💾 {memoryUsage ?? "-"} KB</span>
+        <span>💻 {codeName}</span>
       </div>
     </div>
   );
