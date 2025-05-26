@@ -51,6 +51,11 @@ const ProblemSolvePage = () => {
       return;
     }
 
+    if (!code.trim()) {
+      alert("코드를 작성한 후 제출해주세요.");
+      return;
+    }
+
     try {
       const payload = {
         memberId,
