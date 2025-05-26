@@ -11,7 +11,9 @@ const AxiosInstance = axios.create({
 AxiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status == 401) {
+    const isLoginRequest = error.config?.url?.includes("/members/login");
+
+    if (error.response?.status == 401 && !isLoginRequest) {
       alert("세션이 만료되었습니다. 다시 로그인해주세요.");
       localStorage.removeItem("member");
       window.location.href = "/login"; // 또는 navigate("/login");
