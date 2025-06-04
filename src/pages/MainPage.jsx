@@ -7,6 +7,7 @@ import ProfileImage from "../components/ProfileImage";
 const MainPage = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [memberId, setMemberId] = useState("");
   const [nickname, setNickname] = useState("");
   const [profileImageUrl, setProfileImageUrl] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
@@ -16,6 +17,7 @@ const MainPage = () => {
     if (memberJson) {
       const member = JSON.parse(memberJson);
       setIsLoggedIn(true);
+      setMemberId(member.memberId || "");
       setNickname(member.nickname || "");
       setProfileImageUrl(member.profileImageUrl || "");
       setStatusMessage(member.statusMessage || "");
@@ -25,6 +27,7 @@ const MainPage = () => {
   const handleLogout = () => {
     localStorage.clear();
     setIsLoggedIn(false);
+    setMemberId("");
     setNickname("");
     setProfileImageUrl("");
     setStatusMessage("");
@@ -36,6 +39,12 @@ const MainPage = () => {
     navigate("/update-profile");
   };
 
+  const handleGoToMemberDetail = () => {
+    if (memberId) {
+      navigate(`/members/${memberId}`);
+    }
+  };
+
   return (
     <div className="px-4 mt-12 text-center">
       <LogoHeader isLoggedIn={isLoggedIn} onLogout={handleLogout} onUpdate={handleUpdateProfile} />
@@ -44,7 +53,7 @@ const MainPage = () => {
       <img src={duckImage} alt="오리" className="w-[320px] md:w-[525px] mx-auto my-8" />
 
       {isLoggedIn && (
-        <div className="mt-6">
+        <div className="mt-6 cursor-pointer hover:opacity-90" onClick={handleGoToMemberDetail}>
           <h2 className="mb-2 text-2xl font-semibold text-green-600">{nickname}님 환영합니다!</h2>
           {profileImageUrl && <ProfileImage src={profileImageUrl} />}
           {statusMessage && <p className="mt-2 text-lg text-gray-600">{statusMessage}</p>}
