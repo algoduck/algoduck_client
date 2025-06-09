@@ -24,6 +24,7 @@ function App() {
         <Route path="/ranking" element={<RankingPage />} />
         <Route path="/members/:memberId" element={<MemberDetailPage />} />
         <Route path="/submissions" element={<SubmissionListPage />} />
+        <Route path="/submissions/member/:memberId" element={<SubmissionListPage />} />
       </Routes>
     </Router>
   );

@@ -8,6 +8,7 @@ const MemberDetailPage = () => {
   const { memberId } = useParams();
   const navigate = useNavigate();
   const [member, setMember] = useState(null);
+  const [submissionCount, setSubmissionCount] = useState(null);
 
   useEffect(() => {
     const fetchMember = async () => {
@@ -24,31 +25,52 @@ const MemberDetailPage = () => {
       }
     };
 
+    const fetchSubmissionCount = async () => {
+      try {
+        const res = await AxiosInstance.get(`/submissions/page/member/${memberId}?size=1`);
+        setSubmissionCount(res.data.data.totalCount);
+      } catch (err) {
+        console.error(err);
+        setSubmissionCount(null);
+      }
+    };
+
     fetchMember();
+    fetchSubmissionCount();
   }, [memberId]);
+
+  const goToSubmissions = () => {
+    navigate(`/submissions/member/${memberId}`);
+  };
 
   if (!member) return null;
 
   return (
-    <div className="max-w-xl mx-auto px-4 py-10 text-center">
+    <div className="max-w-xl px-4 py-10 mx-auto text-center">
       <LogoHeader />
 
       <button
         onClick={() => navigate("/ranking")}
-        className="mt-6 mb-10 px-4 py-2 text-sm border border-gray-300 rounded bg-gray-100 hover:bg-gray-200 transition"
+        className="px-4 py-2 mt-6 mb-10 text-sm transition bg-gray-100 border border-gray-300 rounded hover:bg-gray-200"
       >
         ◀ 랭킹 페이지로
       </button>
 
-      <div className="bg-white border border-gray-200 rounded-md shadow p-6">
+      <div className="p-6 bg-white border border-gray-200 rounded-md shadow">
         <ProfileImage src={member.profileImageUrl} size={150} />
 
-        <h1 className="text-2xl font-bold mt-4 mb-2">{member.nickname}</h1>
+        <h1 className="mt-4 mb-2 text-2xl font-bold">{member.nickname}</h1>
 
-        <p className="text-gray-700 text-sm mb-1">아이디: {member.loginId}</p>
-        <p className="text-gray-700 text-sm mb-1">이메일: {member.email}</p>
-        <p className="text-gray-700 text-sm mb-1">푼 문제 수: {member.solved}</p>
-        <p className="text-gray-700 text-sm">상태 메시지: {member.statusMessage}</p>
+        <p className="mb-1 text-sm text-gray-700">아이디: {member.loginId}</p>
+        <p className="mb-1 text-sm text-gray-700">이메일: {member.email}</p>
+        <p className="mb-1 text-sm text-gray-700">푼 문제 수: {member.solved}</p>
+        <p className="mb-1 text-sm text-gray-700">
+          제출:{" "}
+          <span className="text-blue-500 cursor-pointer hover:underline" onClick={goToSubmissions}>
+            {submissionCount !== null ? `${submissionCount} 회` : "불러오는 중..."}
+          </span>
+        </p>
+        <p className="text-sm text-gray-700">상태 메시지: {member.statusMessage}</p>
       </div>
     </div>
   );

@@ -67,7 +67,7 @@ const ProblemSolvePage = () => {
       const { data } = await AxiosInstance.post("/submissions", payload);
       if (data.success) {
         // alert("제출이 완료되었습니다!");
-        navigate("/submissions");
+        navigate(`/submissions/member/${memberId}`);
         console.log("제출 응답:", data.data);
       } else {
         alert("제출에 실패했습니다.");
