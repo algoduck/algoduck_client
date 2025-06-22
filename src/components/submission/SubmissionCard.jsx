@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import AxiosInstance from "../../common/AxiosInstance";
 import CodeModal from "./CodeModal";
@@ -39,12 +39,6 @@ const SubmissionCard = ({ submission }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [codeContent, setCodeContent] = useState("");
 
-  const [progress, setProgress] = useState(null);
-  const [curStatus, setCurStatus] = useState(status);
-  const [curMessage, setCurMessage] = useState(message);
-  const [curExecutionTime, setCurExecutionTime] = useState(executionTime);
-  const [curMemoryUsage, setCurMemoryUsage] = useState(memoryUsage);
-
   const handleCodeClick = async () => {
     try {
       const { data } = await AxiosInstance.get(`/submissions/${submissionId}/code`);
@@ -61,48 +55,11 @@ const SubmissionCard = ({ submission }) => {
     setCodeContent("");
   };
 
-  useEffect(() => {
-    if (curStatus === "JUDGING") {
-      const eventSource = new EventSource(
-        `${process.env.REACT_APP_API_URL}/submissions/${submissionId}/progress`
-      );
-
-      eventSource.addEventListener("progress", (event) => {
-        const data = JSON.parse(event.data);
-        console.log("SSE event received:", data);
-        setProgress(data);
-
-        if (data.result !== "PASS") {
-          setTimeout(() => {
-            setCurStatus(data.result);
-            setCurMessage(data.message);
-            setCurExecutionTime(data.executionTime);
-            setCurMemoryUsage(data.memoryUsage);
-            eventSource.close();
-          }, 300); // 딜레이로 부드러운 전환
-        }
-      });
-
-      eventSource.onerror = (err) => {
-        console.error("SSE 연결 오류:", err);
-        eventSource.close();
-      };
-
-      return () => eventSource.close();
-    }
-  }, [submissionId, curStatus]);
-
-  const renderMessage = () => {
-    if (curStatus !== "JUDGING") return curMessage;
-    if (progress) return `채점중... (${progress.percentage}%)`;
-    return "채점 대기중...";
-  };
-
   return (
     <div className="relative px-6 py-4 transition bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md">
       <div className="flex items-center justify-between mb-2 text-sm text-gray-500">
         <span>제출 #{submissionId}</span>
-        <span className={getStatusStyle(curStatus)}>{renderMessage()}</span>
+        <span className={getStatusStyle(status)}>{message}</span>
       </div>
 
       <Link
@@ -117,8 +74,8 @@ const SubmissionCard = ({ submission }) => {
       </Link>
 
       <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-        <span>⏱ {curExecutionTime ?? "-"} ms</span>
-        <span>💾 {curMemoryUsage ?? "-"} KB</span>
+        <span>⏱ {executionTime ?? "-"} ms</span>
+        <span>💾 {memoryUsage ?? "-"} KB</span>
         <button onClick={handleCodeClick} className="text-blue-600 hover:underline">
           💻 {codeName}
         </button>
