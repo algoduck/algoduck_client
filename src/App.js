@@ -10,8 +10,11 @@ import ProblemSolvePage from "./pages/ProblemSolvePage";
 import RankingPage from "./pages/RankingPage";
 import MemberDetailPage from "./pages/MemberDetailPage";
 import SubmissionListPage from "./pages/SubmissionListPage";
+import useSessionGuard from "./hooks/useSessionGuard";
 
 function App() {
+  useSessionGuard(); //  5분마다 세션 체크
+
   return (
     <Router>
       <Routes>
