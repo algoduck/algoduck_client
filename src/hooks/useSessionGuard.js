@@ -4,7 +4,8 @@ import AxiosInstance from "../common/AxiosInstance";
 import { useDispatch } from "react-redux";
 import { logout } from "../store/slices/authSlice";
 
-const useSessionGuard = (intervalMillis = 5 * 60 * 1000) => {
+// const useSessionGuard = (intervalMillis = 5 * 60 * 1000) => {
+const useSessionGuard = (intervalMillis = 60 * 1000) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
