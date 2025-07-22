@@ -1,9 +1,7 @@
-// src/components/submission/CodeModal.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-// 확장자 → react-syntax-highlighter 언어 매핑
 const extensionToLanguage = {
   java: "java",
   py: "python",
@@ -20,9 +18,39 @@ const extensionToLanguage = {
 const CodeModal = ({ isOpen, codeContent, fileName, onClose }) => {
   if (!isOpen) return null;
 
-  //  파일명으로부터 확장자 추출
   const ext = fileName?.split(".").pop()?.toLowerCase();
   const language = extensionToLanguage[ext] || "text";
+
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(codeContent);
+      setCopied(true);
+    } catch (err) {
+      console.error("복사 실패", err);
+    }
+  };
+
+  useEffect(() => {
+    if (copied) {
+      const timer = setTimeout(() => setCopied(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [copied]);
+
+  const handleDownload = () => {
+    const blob = new Blob([codeContent], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName || "code.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
@@ -33,10 +61,38 @@ const CodeModal = ({ isOpen, codeContent, fileName, onClose }) => {
             ✖
           </button>
         </div>
+
         <div className="p-2 overflow-auto bg-gray-100 rounded max-h-[70vh] text-sm">
           <SyntaxHighlighter language={language} style={vscDarkPlus} showLineNumbers wrapLongLines>
             {codeContent}
           </SyntaxHighlighter>
+        </div>
+
+        <div className="relative flex justify-end gap-2 mt-3">
+          <div className="relative">
+            <button
+              onClick={handleCopy}
+              className="px-3 py-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600"
+            >
+              코드 복사
+            </button>
+
+            {/* 말풍선 */}
+            <div
+              className={`absolute -top-9 left-1/2 -translate-x-1/2 px-3 py-1 text-xs rounded shadow transition-opacity duration-500 whitespace-nowrap ${
+                copied ? "opacity-100 bg-[rgba(255,255,0,0.5)] text-black" : "opacity-0"
+              }`}
+            >
+              코드복사완료
+            </div>
+          </div>
+
+          <button
+            onClick={handleDownload}
+            className="px-3 py-1 text-sm text-white bg-green-500 rounded hover:bg-green-600"
+          >
+            다운로드
+          </button>
         </div>
       </div>
     </div>
