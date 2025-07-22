@@ -81,7 +81,12 @@ const SubmissionCard = ({ submission }) => {
         </button>
       </div>
 
-      <CodeModal isOpen={isModalOpen} codeContent={codeContent} onClose={closeModal} />
+      <CodeModal
+        isOpen={isModalOpen}
+        codeContent={codeContent}
+        fileName={codeName}
+        onClose={closeModal}
+      />
     </div>
   );
 };
