@@ -3,17 +3,21 @@ import LogoHeader from "../common/LogoHeader";
 import ProblemCard from "../components/ProblemCard";
 import Pagination from "../components/Pagination";
 import useFetchList from "../hooks/useFetchList";
+import { useParams } from "react-router-dom";
 
 const ProblemListPage = () => {
+  const { memberId } = useParams();
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 100;
+
+  const url = memberId ? `/problems/solved/${memberId}` : "/problems";
 
   const {
     data: problems,
     totalCount,
     isLoading
   } = useFetchList(
-    "/problems",
+    url,
     {
       pageNumber,
       pageSize

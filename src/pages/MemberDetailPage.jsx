@@ -43,6 +43,10 @@ const MemberDetailPage = () => {
     navigate(`/submissions/member/${memberId}`);
   };
 
+  const goToSolvedProblems = () => {
+    navigate(`/problems/solved/${memberId}`);
+  };
+
   if (!member) return null;
 
   return (
@@ -63,7 +67,15 @@ const MemberDetailPage = () => {
 
         <p className="mb-1 text-sm text-gray-700">아이디: {member.loginId}</p>
         <p className="mb-1 text-sm text-gray-700">이메일: {member.email}</p>
-        <p className="mb-1 text-sm text-gray-700">푼 문제 수: {member.solved}</p>
+        <p className="mb-1 text-sm text-gray-700">
+          푼 문제 수:{" "}
+          <span
+            className="text-blue-500 cursor-pointer hover:underline"
+            onClick={goToSolvedProblems}
+          >
+            {member.solved}
+          </span>
+        </p>
         <p className="mb-1 text-sm text-gray-700">
           제출:{" "}
           <span className="text-blue-500 cursor-pointer hover:underline" onClick={goToSubmissions}>
