@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AxiosInstance from "../common/AxiosInstance";
-import LogoHeader from "../common/LogoHeader";
 import ProfileImage from "../components/ProfileImage";
 
 const MemberDetailPage = () => {
@@ -51,8 +50,6 @@ const MemberDetailPage = () => {
 
   return (
     <div className="max-w-xl px-4 py-10 mx-auto text-center">
-      <LogoHeader />
-
       <button
         onClick={() => navigate("/ranking")}
         className="px-4 py-2 mt-6 mb-10 text-sm transition bg-gray-100 border border-gray-300 rounded hover:bg-gray-200"

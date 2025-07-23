@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AxiosInstance from "../common/AxiosInstance";
-import LogoHeader from "../common/LogoHeader";
 import ProblemDetail from "../components/ProblemDetail";
 import CodeEditor from "../components/CodeEditor";
 import ResultBox from "../components/ResultBox";
@@ -82,7 +81,6 @@ const ProblemSolvePage = () => {
 
   return (
     <div className="max-w-screen-xl px-4 py-10 mx-auto">
-      <LogoHeader />
       <h1 className="mb-10 text-3xl font-bold text-center">
         {problem.problemNumber}. {problem.title}
       </h1>

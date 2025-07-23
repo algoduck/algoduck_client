@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import duckImage from "../assets/duckling.png";
-import LogoHeader from "../common/LogoHeader";
 import ProfileImage from "../components/ProfileImage";
 
 const MainPage = () => {
@@ -24,21 +23,6 @@ const MainPage = () => {
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.clear();
-    setIsLoggedIn(false);
-    setMemberId("");
-    setNickname("");
-    setProfileImageUrl("");
-    setStatusMessage("");
-    alert("로그아웃되었습니다.");
-    navigate("/");
-  };
-
-  const handleUpdateProfile = () => {
-    navigate("/update-profile");
-  };
-
   const handleGoToMemberDetail = () => {
     if (memberId) {
       navigate(`/members/${memberId}`);
@@ -47,7 +31,6 @@ const MainPage = () => {
 
   return (
     <div className="px-4 mt-12 text-center">
-      <LogoHeader isLoggedIn={isLoggedIn} onLogout={handleLogout} onUpdate={handleUpdateProfile} />
       <h1 className="mt-4 mb-6 text-4xl font-bold">알고오리</h1>
 
       <img src={duckImage} alt="오리" className="w-[320px] md:w-[525px] mx-auto my-8" />

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../common/AxiosInstance";
-import LogoHeader from "../common/LogoHeader";
 import FormGroup from "../components/FormGroup";
 import useSessionGuard from "../hooks/useSessionGuard";
 
@@ -111,7 +110,6 @@ const UpdateProfilePage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 py-10 bg-gray-50">
-      <LogoHeader />
       <h1 className="mt-6 mb-8 text-2xl font-bold">프로필 업데이트</h1>
       <form onSubmit={handleSubmit} className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
         <FormGroup label="로그인 아이디" type="text" value={form.loginId} disabled />

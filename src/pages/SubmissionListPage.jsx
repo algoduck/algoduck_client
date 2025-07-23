@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import AxiosInstance from "../common/AxiosInstance";
 import SubmissionCard from "../components/submission/SubmissionCard";
 import SubmissionPagination from "../components/submission/SubmissionPagination";
-import LogoHeader from "../common/LogoHeader";
 import { useParams } from "react-router-dom"; // 👈 memberId param 처리
 
 const SubmissionListPage = () => {
@@ -43,7 +42,6 @@ const SubmissionListPage = () => {
 
   return (
     <div className="p-6">
-      <LogoHeader />
       <h2 className="mb-4 text-xl font-bold">채점 현황</h2>
 
       {memberId && totalCount !== null && (
