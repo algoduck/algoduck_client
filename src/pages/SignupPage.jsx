@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../common/AxiosInstance";
-import LogoHeader from "../common/LogoHeader";
 import FormGroup from "../components/FormGroup";
 import { useDispatch } from "react-redux";
 import { login } from "../store/slices/authSlice";
@@ -164,7 +163,6 @@ const SignupPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 py-10 bg-gray-50">
-      <LogoHeader />
       <h1 className="mt-6 mb-8 text-2xl font-bold">회원가입</h1>
       <form onSubmit={handleSubmit} className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
         <FormGroup

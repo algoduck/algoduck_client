@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../common/AxiosInstance";
-import LogoHeader from "../common/LogoHeader";
 import FormGroup from "../components/FormGroup";
 import { useDispatch } from "react-redux";
 import { login } from "../store/slices/authSlice";
@@ -43,7 +42,6 @@ const LoginPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-gray-50">
-      <LogoHeader />
       <h1 className="mt-4 mb-6 text-2xl font-bold">로그인</h1>
       <form className="w-full max-w-sm p-6 bg-white rounded-lg shadow-md" onSubmit={handleSubmit}>
         <FormGroup

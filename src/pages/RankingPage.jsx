@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import LogoHeader from "../common/LogoHeader";
 import Pagination from "../components/Pagination";
 import MemberCard from "../components/MemberCard";
 import useFetchList from "../hooks/useFetchList";
@@ -25,7 +24,6 @@ const RankingPage = () => {
 
   return (
     <div className="px-4 py-10 text-center">
-      <LogoHeader />
       <h1 className="mb-8 text-3xl font-bold">🏆 랭킹</h1>
 
       <div className="max-w-3xl mx-auto text-left">

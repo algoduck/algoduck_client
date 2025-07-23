@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import LogoHeader from "../common/LogoHeader";
 import ProblemCard from "../components/ProblemCard";
 import Pagination from "../components/Pagination";
 import useFetchList from "../hooks/useFetchList";
@@ -29,7 +28,6 @@ const ProblemListPage = () => {
 
   return (
     <div className="px-4 py-10 text-center">
-      <LogoHeader />
       <h1 className="my-8 text-3xl font-bold">📚 문제</h1>
 
       <div className="max-w-3xl mx-auto text-left">
