@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import duckImage from "../assets/duckling.png";
 import ProfileImage from "../components/ProfileImage";
 
@@ -42,26 +42,6 @@ const MainPage = () => {
           {statusMessage && <p className="mt-2 text-lg text-gray-600">{statusMessage}</p>}
         </div>
       )}
-
-      <div className="flex flex-wrap justify-center gap-4 mt-8">
-        <Link to="/ranking">
-          <button className="px-5 py-2 text-sm text-white transition bg-blue-500 rounded hover:bg-blue-600">
-            랭킹
-          </button>
-        </Link>
-
-        <Link to="/problems">
-          <button className="px-5 py-2 text-sm text-white transition bg-blue-500 rounded hover:bg-blue-600">
-            문제
-          </button>
-        </Link>
-
-        <Link to="/submissions">
-          <button className="px-5 py-2 text-sm text-white transition bg-blue-500 rounded hover:bg-blue-600">
-            채점 현황
-          </button>
-        </Link>
-      </div>
     </div>
   );
 };
