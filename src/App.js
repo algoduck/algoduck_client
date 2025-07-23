@@ -21,6 +21,7 @@ function App() {
         <Route path="/update-profile" element={<UpdateProfilePage />} />
         <Route path="/problems" element={<ProblemListPage />} />
         <Route path="/problems/:problemId" element={<ProblemSolvePage />} />
+        <Route path="/problems/solved/:memberId" element={<ProblemListPage />} />
         <Route path="/ranking" element={<RankingPage />} />
         <Route path="/members/:memberId" element={<MemberDetailPage />} />
         <Route path="/submissions" element={<SubmissionListPage />} />
