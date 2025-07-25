@@ -15,6 +15,7 @@ const ProblemSolvePage = () => {
   const [result /* , setResult */] = useState("실행 결과가 여기에 표시됩니다.");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [memberId, setMemberId] = useState(null);
+  const [selectedLang, setSelectedLang] = useState(null);
 
   const validateSession = useSessionValidationBeforeAction();
   const navigate = useNavigate();
@@ -55,12 +56,14 @@ const ProblemSolvePage = () => {
       return;
     }
 
+    console.log("selectedLang = ", selectedLang);
+
     try {
       const payload = {
         memberId,
         problemId: Number(problemId),
         sourceCode: code,
-        versionId: 1001
+        versionId: selectedLang
       };
 
       const { data } = await AxiosInstance.post("/submissions", payload);
@@ -94,7 +97,12 @@ const ProblemSolvePage = () => {
 
         {/* 코드 작성 영역 */}
         <div className="flex-[1.5] flex flex-col gap-4">
-          <CodeEditor value={code} onChange={(e) => setCode(e.target.value)} />
+          <CodeEditor
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            selectedLang={selectedLang} // 이거 빠졌었음!
+            onLangChange={(lang) => setSelectedLang(lang)} // 함수도 이렇게 넘겨줘야 작동함
+          />
           <ResultBox result={result} />
 
           <button
