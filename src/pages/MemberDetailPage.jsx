@@ -39,7 +39,9 @@ const MemberDetailPage = () => {
   }, [memberId]);
 
   const goToSubmissions = () => {
-    navigate(`/submissions/member/${memberId}`);
+    navigate(`/submissions/member/${memberId}`, {
+      state: { nickname: member.nickname }
+    });
   };
 
   const goToSolvedProblems = () => {

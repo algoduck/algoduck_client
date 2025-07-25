@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AxiosInstance from "../common/AxiosInstance";
 import SubmissionCard from "../components/submission/SubmissionCard";
 import SubmissionPagination from "../components/submission/SubmissionPagination";
-import { useParams } from "react-router-dom"; // 👈 memberId param 처리
+import { useLocation, useParams } from "react-router-dom"; // 👈 memberId param 처리
 
 const SubmissionListPage = () => {
   const [submissions, setSubmissions] = useState([]);
@@ -14,6 +14,8 @@ const SubmissionListPage = () => {
   const size = 20;
 
   const { memberId } = useParams(); // 👈 memberId가 있을 수도 있음
+  const location = useLocation();
+  const nickname = location.state?.nickname;
 
   const fetchSubmissions = async (params = {}) => {
     try {
@@ -42,7 +44,9 @@ const SubmissionListPage = () => {
 
   return (
     <div className="p-6">
-      <h2 className="mb-4 text-xl font-bold">채점 현황</h2>
+      <h2 className="mb-4 text-xl font-bold">
+        {nickname ? `${nickname}의 채점 현황` : "채점 현황"}
+      </h2>
 
       {memberId && totalCount !== null && (
         <div className="mb-4 text-sm text-gray-600">
