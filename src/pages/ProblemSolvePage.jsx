@@ -100,7 +100,7 @@ const ProblemSolvePage = () => {
           <button
             onClick={handleSubmit}
             disabled={!isLoggedIn}
-            className={`self-start px-6 py-3 text-sm font-semibold rounded transition ${
+            className={`self-end px-6 py-3 text-sm font-semibold rounded transition ${
               isLoggedIn
                 ? "bg-green-500 hover:bg-green-600 text-white"
                 : "bg-gray-300 text-white cursor-not-allowed"
