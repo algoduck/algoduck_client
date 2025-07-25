@@ -45,7 +45,9 @@ const MemberDetailPage = () => {
   };
 
   const goToSolvedProblems = () => {
-    navigate(`/problems/solved/${memberId}`);
+    navigate(`/problems/solved/${memberId}`, {
+      state: { nickname: member.nickname }
+    });
   };
 
   if (!member) return null;
