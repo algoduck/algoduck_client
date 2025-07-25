@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import ProblemCard from "../components/ProblemCard";
 import Pagination from "../components/Pagination";
 import useFetchList from "../hooks/useFetchList";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 const ProblemListPage = () => {
   const { memberId } = useParams();
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 100;
+  const location = useLocation();
+  const nickname = location.state?.nickname;
 
   const url = memberId ? `/problems/solved/${memberId}` : "/problems";
 
@@ -28,7 +30,7 @@ const ProblemListPage = () => {
 
   return (
     <div className="px-4 py-10 text-center">
-      <h1 className="my-8 text-3xl font-bold">📚 문제</h1>
+      <h1 className="my-8 text-3xl font-bold">{nickname ? `📚 ${nickname}가 푼 문제` : "문제"}</h1>
 
       <div className="max-w-3xl mx-auto text-left">
         {isLoading ? (
