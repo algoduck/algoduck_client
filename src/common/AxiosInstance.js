@@ -13,8 +13,10 @@ AxiosInstance.interceptors.response.use(
   (error) => {
     const isLoginRequest = error.config?.url?.includes("/members/login");
 
+    console.log("url = ", error.config.url);
+
     if (error.response?.status == 401 && !isLoginRequest) {
-      alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+      // alert("세션이 만료되었습니다. 다시 로그인해주세요.");
       localStorage.removeItem("member");
       window.location.href = "/login"; // 또는 navigate("/login");
     }
