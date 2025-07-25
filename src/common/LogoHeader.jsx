@@ -1,16 +1,15 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../store/slices/authSlice";
+import { handleSessionLogout } from "../utils/session";
 
 const LogoHeader = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.auth);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    window.location.reload();
+  const handleLogout = async () => {
+    await handleSessionLogout({ dispatch, navigate, silent: true });
   };
 
   const handleUpdate = () => {
