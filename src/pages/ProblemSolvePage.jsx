@@ -15,7 +15,7 @@ const ProblemSolvePage = () => {
   const [result /* , setResult */] = useState("실행 결과가 여기에 표시됩니다.");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [memberId, setMemberId] = useState(null);
-  const [selectedLang, setSelectedLang] = useState(null);
+  const [selectedLang, setSelectedLang] = useState(1001);
 
   const validateSession = useSessionValidationBeforeAction();
   const navigate = useNavigate();
