@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ProblemCard from "../components/ProblemCard";
 import Pagination from "../components/Pagination";
 import useFetchList from "../hooks/useFetchList";
@@ -27,6 +27,20 @@ const ProblemListPage = () => {
   );
 
   const totalPages = Math.ceil(totalCount / pageSize);
+  const startTimeRef = useRef(null);
+
+  useEffect(() => {
+    if (isLoading) {
+      // 로딩이 시작된 시점 기록
+      startTimeRef.current = performance.now();
+      console.log("로딩 시작");
+    } else if (!isLoading && startTimeRef.current) {
+      // 로딩이 끝난 시점에서 경과 시간 계산
+      const elapsed = performance.now() - startTimeRef.current;
+      console.log(`로딩 완료 (걸린 시간: ${(elapsed / 1000).toFixed(2)}초)`);
+      startTimeRef.current = null; // 다음 측정을 위해 초기화
+    }
+  }, [isLoading]);
 
   return (
     <div className="px-4 py-10 text-center">
