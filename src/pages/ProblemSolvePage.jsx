@@ -107,24 +107,31 @@ const ProblemSolvePage = () => {
           >
             {/* 코드 입력 영역 */}
             <Panel defaultSize={60} minSize={30}>
-              <div className="flex flex-col h-full gap-4 pl-2">
-                <CodeEditor
-                  value={code}
-                  onChange={(value) => setCode(value)}
-                  selectedLang={selectedLang}
-                  onLangChange={(lang) => setSelectedLang(lang)}
-                />
-                <button
-                  onClick={handleSubmit}
-                  disabled={!isLoggedIn}
-                  className={`self-end px-6 py-3 text-sm font-semibold rounded transition ${
-                    isLoggedIn
-                      ? "bg-green-500 hover:bg-green-600 text-white"
-                      : "bg-gray-300 text-white cursor-not-allowed"
-                  }`}
-                >
-                  제출하기
-                </button>
+              <div className="flex flex-col h-full pl-2">
+                {/* 코드 에디터는 높이 100%, 스크롤은 내부 처리 */}
+                <div className="flex flex-col flex-1 overflow-hidden">
+                  <CodeEditor
+                    value={code}
+                    onChange={(value) => setCode(value)}
+                    selectedLang={selectedLang}
+                    onLangChange={(lang) => setSelectedLang(lang)}
+                  />
+                </div>
+
+                {/* 버튼은 고정 */}
+                <div className="flex justify-end mt-3">
+                  <button
+                    onClick={handleSubmit}
+                    disabled={!isLoggedIn}
+                    className={`px-6 py-3 text-sm font-semibold rounded transition ${
+                      isLoggedIn
+                        ? "bg-green-500 hover:bg-green-600 text-white"
+                        : "bg-gray-300 text-white cursor-not-allowed"
+                    }`}
+                  >
+                    제출하기
+                  </button>
+                </div>
               </div>
             </Panel>
 
