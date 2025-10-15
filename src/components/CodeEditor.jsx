@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
+import CodeMirror from "@uiw/react-codemirror";
+import { java } from "@codemirror/lang-java";
+import { oneDark } from "@codemirror/theme-one-dark";
 
 const languageOptions = [
   { label: "Java 8", value: 1001 },
@@ -13,14 +16,22 @@ const CodeEditor = ({ value, onChange, selectedLang, onLangChange }) => {
   const selectedLabel =
     languageOptions.find((opt) => opt.value === selectedLang)?.label || "Select...";
 
-  const handleSelect = (value) => {
-    onLangChange(value);
-    setShowDropdown(false);
-  };
+  // PK 기반 언어 매핑 (필요시 다른 언어 추가 가능)
+  const languageExtension = useMemo(() => {
+    switch (selectedLang) {
+      case 1001:
+      case 1002:
+      case 1003:
+      case 1004:
+        return java();
+      default:
+        return java(); // 기본값
+    }
+  }, [selectedLang]);
 
   return (
     <div className="relative w-full h-[400px]">
-      {/* 드롭다운 - 오른쪽 상단 */}
+      {/* 드롭다운 */}
       <div className="absolute z-10 top-2 right-2">
         <div
           className="px-3 py-1 bg-white border border-gray-300 rounded shadow-sm cursor-pointer"
@@ -34,7 +45,10 @@ const CodeEditor = ({ value, onChange, selectedLang, onLangChange }) => {
               <div
                 key={opt.value}
                 className="px-3 py-2 cursor-pointer hover:bg-gray-100"
-                onClick={() => handleSelect(opt.value)}
+                onClick={() => {
+                  onLangChange(opt.value);
+                  setShowDropdown(false);
+                }}
               >
                 {opt.label}
               </div>
@@ -43,12 +57,14 @@ const CodeEditor = ({ value, onChange, selectedLang, onLangChange }) => {
         )}
       </div>
 
-      {/* 텍스트에디터 */}
-      <textarea
-        placeholder="여기에 코드를 입력하세요..."
+      {/* CodeMirror 에디터 */}
+      <CodeMirror
         value={value}
+        height="400px"
+        theme={oneDark}
+        extensions={[languageExtension]}
         onChange={onChange}
-        className="w-full h-full p-4 font-mono text-sm border border-gray-300 resize-y rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="border border-gray-300 rounded-xl"
       />
     </div>
   );

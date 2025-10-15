@@ -99,9 +99,9 @@ const ProblemSolvePage = () => {
         <div className="flex-[1.5] flex flex-col gap-4">
           <CodeEditor
             value={code}
-            onChange={(e) => setCode(e.target.value)}
-            selectedLang={selectedLang} // 이거 빠졌었음!
-            onLangChange={(lang) => setSelectedLang(lang)} // 함수도 이렇게 넘겨줘야 작동함
+            onChange={(value) => setCode(value)} // ✅ CodeMirror는 문자열 value를 직접 반환
+            selectedLang={selectedLang}
+            onLangChange={(lang) => setSelectedLang(lang)}
           />
           <ResultBox result={result} />
 
