@@ -4,13 +4,12 @@ import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       <LogoHeader />
-      <main className="pt-20">
-        {" "}
-        {/* 헤더 높이만큼 여백 */}
+      {/* 헤더 높이 약 64px 만큼 여백 */}
+      <div className="pt-16">
         <Outlet />
-      </main>
+      </div>
     </div>
   );
 };

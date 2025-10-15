@@ -17,7 +17,7 @@ const LogoHeader = () => {
   };
 
   return (
-    <div className="bg-white border-b border-gray-200">
+    <header className="fixed top-0 left-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
       <div className="flex items-center justify-between px-6 py-4">
         {/* 왼쪽 로고 */}
         <div
@@ -28,7 +28,7 @@ const LogoHeader = () => {
           <span className="text-2xl font-bold">알고오리</span>
         </div>
 
-        {/* 오른쪽 모든 버튼 */}
+        {/* 오른쪽 버튼들 */}
         <div className="flex flex-wrap items-center justify-end space-x-2">
           <Link to="/problems">
             <button className="px-4 py-2 text-sm text-white bg-blue-500 rounded hover:bg-blue-600">
@@ -45,6 +45,7 @@ const LogoHeader = () => {
               랭킹
             </button>
           </Link>
+
           {isLoggedIn ? (
             <>
               <button
@@ -76,7 +77,7 @@ const LogoHeader = () => {
           )}
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 
