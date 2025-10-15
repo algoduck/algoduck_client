@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import AxiosInstance from "../common/AxiosInstance";
 import ProblemDetail from "../components/ProblemDetail";
 import CodeEditor from "../components/CodeEditor";
 import ResultBox from "../components/ResultBox";
 import TestcaseList from "../components/TestcaseList";
 import useSessionValidationBeforeAction from "../hooks/useSessionValidationBeforeAction";
-import { useNavigate } from "react-router-dom";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 const ProblemSolvePage = () => {
   const { problemId } = useParams();
   const [problem, setProblem] = useState(null);
   const [code, setCode] = useState("");
-  const [result /* , setResult */] = useState("실행 결과가 여기에 표시됩니다.");
+  const [result] = useState("실행 결과가 여기에 표시됩니다.");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [memberId, setMemberId] = useState(null);
   const [selectedLang, setSelectedLang] = useState(1001);
@@ -45,18 +45,14 @@ const ProblemSolvePage = () => {
   const handleSubmit = async () => {
     const isValid = await validateSession();
     if (!isValid) return;
-
     if (!isLoggedIn || !memberId) {
       alert("로그인 후 제출할 수 있습니다.");
       return;
     }
-
     if (!code.trim()) {
       alert("코드를 작성한 후 제출해주세요.");
       return;
     }
-
-    console.log("selectedLang = ", selectedLang);
 
     try {
       const payload = {
@@ -68,9 +64,7 @@ const ProblemSolvePage = () => {
 
       const { data } = await AxiosInstance.post("/submissions", payload);
       if (data.success) {
-        // alert("제출이 완료되었습니다!");
         navigate(`/submissions/member/${memberId}`);
-        console.log("제출 응답:", data.data);
       } else {
         alert("제출에 실패했습니다.");
       }
@@ -88,36 +82,64 @@ const ProblemSolvePage = () => {
         {problem.problemNumber}. {problem.title}
       </h1>
 
-      <div className="flex flex-col gap-8 lg:flex-row">
-        {/* 문제 설명 + 테스트케이스 */}
-        <div className="flex-1">
-          <ProblemDetail problem={problem} />
-          <TestcaseList testcases={problem.testcaseResponseDtoList} />
-        </div>
+      {/* 🔸 외부 수평 분할: 문제 설명 ↔ 코드/결과 */}
+      <PanelGroup
+        direction="horizontal"
+        className="h-[calc(100vh-200px)] border rounded-xl"
+        storageKey="layout-main"
+      >
+        {/* 왼쪽: 문제 설명 */}
+        <Panel defaultSize={45} minSize={25}>
+          <div className="h-full pr-2 overflow-y-auto">
+            <ProblemDetail problem={problem} />
+            <TestcaseList testcases={problem.testcaseResponseDtoList} />
+          </div>
+        </Panel>
 
-        {/* 코드 작성 영역 */}
-        <div className="flex-[1.5] flex flex-col gap-4">
-          <CodeEditor
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            selectedLang={selectedLang} // 이거 빠졌었음!
-            onLangChange={(lang) => setSelectedLang(lang)} // 함수도 이렇게 넘겨줘야 작동함
-          />
-          <ResultBox result={result} />
+        {/* 가로 중간선 */}
+        <PanelResizeHandle className="w-1 transition-colors bg-gray-300 hover:bg-blue-400 cursor-col-resize" />
 
-          <button
-            onClick={handleSubmit}
-            disabled={!isLoggedIn}
-            className={`self-end px-6 py-3 text-sm font-semibold rounded transition ${
-              isLoggedIn
-                ? "bg-green-500 hover:bg-green-600 text-white"
-                : "bg-gray-300 text-white cursor-not-allowed"
-            }`}
+        {/* 오른쪽: 코드 + 실행결과 세로 분할 */}
+        <Panel defaultSize={55} minSize={30}>
+          <PanelGroup
+            direction="vertical"
+            storageKey="layout-editor-result" // ✅ 세로 비율도 저장
           >
-            제출하기
-          </button>
-        </div>
-      </div>
+            {/* 코드 입력 영역 */}
+            <Panel defaultSize={60} minSize={30}>
+              <div className="flex flex-col h-full gap-4 pl-2">
+                <CodeEditor
+                  value={code}
+                  onChange={(value) => setCode(value)}
+                  selectedLang={selectedLang}
+                  onLangChange={(lang) => setSelectedLang(lang)}
+                />
+                <button
+                  onClick={handleSubmit}
+                  disabled={!isLoggedIn}
+                  className={`self-end px-6 py-3 text-sm font-semibold rounded transition ${
+                    isLoggedIn
+                      ? "bg-green-500 hover:bg-green-600 text-white"
+                      : "bg-gray-300 text-white cursor-not-allowed"
+                  }`}
+                >
+                  제출하기
+                </button>
+              </div>
+            </Panel>
+
+            {/* 코드/결과 중간선 */}
+            <PanelResizeHandle className="h-1 transition-colors bg-gray-300 hover:bg-blue-400 cursor-row-resize" />
+
+            {/* 실행 결과 영역 */}
+            <Panel defaultSize={40} minSize={20}>
+              <div className="h-full pl-2 overflow-auto">
+                <ResultBox result={result} />
+              </div>
+            </Panel>
+          </PanelGroup>
+        </Panel>
+      </PanelGroup>
     </div>
   );
 };

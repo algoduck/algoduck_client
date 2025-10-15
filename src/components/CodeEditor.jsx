@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
+import CodeMirror from "@uiw/react-codemirror";
+import { java } from "@codemirror/lang-java";
+import { oneDark } from "@codemirror/theme-one-dark";
 
 const languageOptions = [
   { label: "Java 8", value: 1001 },
@@ -13,14 +16,21 @@ const CodeEditor = ({ value, onChange, selectedLang, onLangChange }) => {
   const selectedLabel =
     languageOptions.find((opt) => opt.value === selectedLang)?.label || "Select...";
 
-  const handleSelect = (value) => {
-    onLangChange(value);
-    setShowDropdown(false);
-  };
+  const languageExtension = useMemo(() => {
+    switch (selectedLang) {
+      case 1001:
+      case 1002:
+      case 1003:
+      case 1004:
+        return java();
+      default:
+        return java();
+    }
+  }, [selectedLang]);
 
   return (
-    <div className="relative w-full h-[400px]">
-      {/* 드롭다운 - 오른쪽 상단 */}
+    <div className="relative flex flex-col w-full h-full">
+      {/* 드롭다운 */}
       <div className="absolute z-10 top-2 right-2">
         <div
           className="px-3 py-1 bg-white border border-gray-300 rounded shadow-sm cursor-pointer"
@@ -34,7 +44,10 @@ const CodeEditor = ({ value, onChange, selectedLang, onLangChange }) => {
               <div
                 key={opt.value}
                 className="px-3 py-2 cursor-pointer hover:bg-gray-100"
-                onClick={() => handleSelect(opt.value)}
+                onClick={() => {
+                  onLangChange(opt.value);
+                  setShowDropdown(false);
+                }}
               >
                 {opt.label}
               </div>
@@ -43,13 +56,17 @@ const CodeEditor = ({ value, onChange, selectedLang, onLangChange }) => {
         )}
       </div>
 
-      {/* 텍스트에디터 */}
-      <textarea
-        placeholder="여기에 코드를 입력하세요..."
-        value={value}
-        onChange={onChange}
-        className="w-full h-full p-4 font-mono text-sm border border-gray-300 resize-y rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
+      {/* 코드미러 (부모 패널 높이 100% 반영) */}
+      <div className="flex-1 h-full">
+        <CodeMirror
+          value={value}
+          height="100%"
+          theme={oneDark}
+          extensions={[languageExtension]}
+          onChange={onChange}
+          className="w-full h-full border border-gray-300 rounded-xl"
+        />
+      </div>
     </div>
   );
 };
