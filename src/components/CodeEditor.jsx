@@ -16,7 +16,6 @@ const CodeEditor = ({ value, onChange, selectedLang, onLangChange }) => {
   const selectedLabel =
     languageOptions.find((opt) => opt.value === selectedLang)?.label || "Select...";
 
-  // PK 기반 언어 매핑 (필요시 다른 언어 추가 가능)
   const languageExtension = useMemo(() => {
     switch (selectedLang) {
       case 1001:
@@ -25,12 +24,12 @@ const CodeEditor = ({ value, onChange, selectedLang, onLangChange }) => {
       case 1004:
         return java();
       default:
-        return java(); // 기본값
+        return java();
     }
   }, [selectedLang]);
 
   return (
-    <div className="relative w-full h-[400px]">
+    <div className="relative flex flex-col w-full h-full">
       {/* 드롭다운 */}
       <div className="absolute z-10 top-2 right-2">
         <div
@@ -57,15 +56,17 @@ const CodeEditor = ({ value, onChange, selectedLang, onLangChange }) => {
         )}
       </div>
 
-      {/* CodeMirror 에디터 */}
-      <CodeMirror
-        value={value}
-        height="400px"
-        theme={oneDark}
-        extensions={[languageExtension]}
-        onChange={onChange}
-        className="border border-gray-300 rounded-xl"
-      />
+      {/* 코드미러 (부모 패널 높이 100% 반영) */}
+      <div className="flex-1 h-full">
+        <CodeMirror
+          value={value}
+          height="100%"
+          theme={oneDark}
+          extensions={[languageExtension]}
+          onChange={onChange}
+          className="w-full h-full border border-gray-300 rounded-xl"
+        />
+      </div>
     </div>
   );
 };
