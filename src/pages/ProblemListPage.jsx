@@ -17,50 +17,52 @@ const ProblemListPage = () => {
     data: problems,
     totalCount,
     isLoading
-  } = useFetchList(
-    url,
-    {
-      pageNumber,
-      pageSize
-    },
-    "problems"
-  );
+  } = useFetchList(url, { pageNumber, pageSize }, "problems");
 
   const totalPages = Math.ceil(totalCount / pageSize);
   const startTimeRef = useRef(null);
 
   useEffect(() => {
     if (isLoading) {
-      // 로딩이 시작된 시점 기록
       startTimeRef.current = performance.now();
       console.log("로딩 시작");
     } else if (!isLoading && startTimeRef.current) {
-      // 로딩이 끝난 시점에서 경과 시간 계산
       const elapsed = performance.now() - startTimeRef.current;
       console.log(`로딩 완료 (걸린 시간: ${(elapsed / 1000).toFixed(2)}초)`);
-      startTimeRef.current = null; // 다음 측정을 위해 초기화
+      startTimeRef.current = null;
     }
   }, [isLoading]);
 
   return (
-    <div className="px-4 py-10 text-center">
-      <h1 className="my-8 text-3xl font-bold">{nickname ? `📚 ${nickname}가 푼 문제` : "문제"}</h1>
-
-      <div className="max-w-3xl mx-auto text-left">
-        {isLoading ? (
-          <p className="text-center text-gray-500">로딩 중...</p>
-        ) : problems.length === 0 ? (
-          <p className="text-center text-gray-500">문제가 없습니다.</p>
-        ) : (
-          <ul className="p-0 list-none">
-            {problems.map((problem) => (
-              <ProblemCard key={problem.problemId} problem={problem} />
-            ))}
-          </ul>
-        )}
+    <div className="flex flex-col min-h-[calc(100vh-64px)] bg-gray-50">
+      {/* 상단 제목 */}
+      <div className="flex-none pt-8 pb-4 text-center">
+        <h1 className="text-3xl font-bold text-gray-800">
+          {nickname ? `📚 ${nickname}가 푼 문제` : "문제"}
+        </h1>
       </div>
 
-      <Pagination pageNumber={pageNumber} totalPages={totalPages} onPageChange={setPageNumber} />
+      {/* 문제 리스트 스크롤 영역 */}
+      <div className="flex-1 px-6 pb-6 overflow-y-auto">
+        <div className="max-w-5xl mx-auto text-left">
+          {isLoading ? (
+            <p className="py-10 text-center text-gray-500">로딩 중...</p>
+          ) : problems.length === 0 ? (
+            <p className="py-10 text-center text-gray-500">문제가 없습니다.</p>
+          ) : (
+            <ul className="p-0 m-0 list-none">
+              {problems.map((problem) => (
+                <ProblemCard key={problem.problemId} problem={problem} />
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      {/* 하단 고정 페이지네이션 */}
+      <div className="flex-none sticky bottom-0 z-10 bg-gray-50 border-t border-gray-200 shadow-[0_-2px_6px_rgba(0,0,0,0.05)] py-4">
+        <Pagination pageNumber={pageNumber} totalPages={totalPages} onPageChange={setPageNumber} />
+      </div>
     </div>
   );
 };
