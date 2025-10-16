@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import SearchModal from "../search/SearchModal";
 
-const SubmissionPagination = ({ hasNext, hasPrev, onNext, onPrev }) => {
+const CursorPagination = ({ hasNext, hasPrev, onNext, onPrev }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handleSearch = (query) => {
@@ -47,4 +47,4 @@ const SubmissionPagination = ({ hasNext, hasPrev, onNext, onPrev }) => {
   );
 };
 
-export default SubmissionPagination;
+export default CursorPagination;

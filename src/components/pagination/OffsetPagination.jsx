@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import SearchModal from "./search/SearchModal";
+import SearchModal from "../search/SearchModal";
 
-const Pagination = ({ pageNumber, totalPages, onPageChange }) => {
+const OffsetPagination = ({ pageNumber, totalPages, onPageChange }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handleSearch = (query) => {
@@ -73,4 +73,4 @@ const Pagination = ({ pageNumber, totalPages, onPageChange }) => {
   );
 };
 
-export default Pagination;
+export default OffsetPagination;

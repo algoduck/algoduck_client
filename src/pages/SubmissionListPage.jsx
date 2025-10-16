@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AxiosInstance from "../common/AxiosInstance";
 import SubmissionCard from "../components/submission/SubmissionCard";
-import SubmissionPagination from "../components/submission/SubmissionPagination";
+import CursorPagination from "../components/pagination/CursorPagination";
 import { useLocation, useParams } from "react-router-dom";
 
 const SubmissionListPage = () => {
@@ -73,7 +73,7 @@ const SubmissionListPage = () => {
 
       {/* 하단 고정 페이지네이션 */}
       <div className="flex-none sticky bottom-0 z-10 bg-gray-50 border-t border-gray-200 shadow-[0_-2px_6px_rgba(0,0,0,0.05)] py-4">
-        <SubmissionPagination
+        <CursorPagination
           hasNext={hasNext}
           hasPrev={hasPrev}
           onNext={() => fetchSubmissions({ lastSeenId, size: size + 1 })}
