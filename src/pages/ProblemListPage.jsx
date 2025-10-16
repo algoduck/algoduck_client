@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import ProblemCard from "../components/ProblemCard";
-import Pagination from "../components/Pagination";
+import OffsetPagination from "../components/pagination/OffsetPagination";
 import useFetchList from "../hooks/useFetchList";
 import { useLocation, useParams } from "react-router-dom";
 
@@ -61,7 +61,11 @@ const ProblemListPage = () => {
 
       {/* 하단 고정 페이지네이션 */}
       <div className="flex-none sticky bottom-0 z-10 bg-gray-50 border-t border-gray-200 shadow-[0_-2px_6px_rgba(0,0,0,0.05)] py-4">
-        <Pagination pageNumber={pageNumber} totalPages={totalPages} onPageChange={setPageNumber} />
+        <OffsetPagination
+          pageNumber={pageNumber}
+          totalPages={totalPages}
+          onPageChange={setPageNumber}
+        />
       </div>
     </div>
   );
