@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AxiosInstance from "../common/AxiosInstance";
 
-const useFetchList = (url, params = {}) => {
+const useFetchList = (baseUrl, params = {}) => {
   const [data, setData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -11,7 +11,19 @@ const useFetchList = (url, params = {}) => {
     const fetchList = async () => {
       setIsLoading(true);
       try {
-        const { data } = await AxiosInstance.get(url, { params });
+        // ✅ 검색 중인지 판별
+        const isSearching = params.type && params.query;
+
+        // ✅ URL 결정
+        const requestUrl = isSearching ? "/problems/search" : baseUrl;
+
+        // ✅ 요청 전송
+        const { data } = await AxiosInstance.get(requestUrl, {
+          params: {
+            ...params // pageNumber, pageSize, type, query 등
+          }
+        });
+
         if (data.success) {
           setData(data.data.problems || data.data.members || []);
           setTotalCount(data.data.totalCount || 0);
@@ -27,7 +39,7 @@ const useFetchList = (url, params = {}) => {
     };
 
     fetchList();
-  }, [url, JSON.stringify(params)]); // param 변경 시 refetch
+  }, [baseUrl, JSON.stringify(params)]); // param 변경 시 refetch
 
   return { data, totalCount, isLoading, error };
 };
