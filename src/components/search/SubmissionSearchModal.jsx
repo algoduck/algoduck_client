@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
 const SubmissionSearchModal = ({ isOpen, onClose, onSearch }) => {
+  const LANGUAGE_VERSION_MAP = {
+    Java: [1001, 1002, 1003, 1004]
+  };
+
   const [filters, setFilters] = useState({
     loginId: "",
     problemNumber: "",
@@ -22,8 +26,13 @@ const SubmissionSearchModal = ({ isOpen, onClose, onSearch }) => {
       Object.entries(filters).filter(([_, v]) => v && v.trim() !== "")
     );
 
-    // 아무것도 입력 안 했을 때
-    if (Object.keys(activeFilters).length === 0) return;
+    if (activeFilters.language) {
+      const versionIds = LANGUAGE_VERSION_MAP[activeFilters.language];
+      if (versionIds) {
+        activeFilters.languageVersionIds = versionIds.join(",");
+      }
+      delete activeFilters.language;
+    }
 
     onSearch(activeFilters);
   };
