@@ -14,24 +14,27 @@ const useFetchList = (baseUrl, params = {}) => {
         // ✅ 검색 중인지 판별
         const isSearching = params.type && params.query;
 
-        // ✅ URL 결정
-        const requestUrl = isSearching ? "/problems/search" : baseUrl;
+        // ✅ baseUrl 기준으로 검색 URL 구성
+        const requestUrl = isSearching
+          ? baseUrl.endsWith("/search")
+            ? baseUrl
+            : `${baseUrl}/search`
+          : baseUrl;
 
         // ✅ 요청 전송
-        const { data } = await AxiosInstance.get(requestUrl, {
-          params: {
-            ...params // pageNumber, pageSize, type, query 등
-          }
-        });
+        const { data } = await AxiosInstance.get(requestUrl, { params });
 
         if (data.success) {
-          setData(data.data.problems || data.data.members || []);
+          // problems, members 모두 지원
+          const content = data.data.problems || data.data.members || data.data.submissions || [];
+
+          setData(content);
           setTotalCount(data.data.totalCount || 0);
         } else {
           setError("데이터를 불러오지 못했습니다.");
         }
       } catch (err) {
-        console.error(err);
+        console.error("useFetchList Error:", err);
         setError("오류가 발생했습니다.");
       } finally {
         setIsLoading(false);
