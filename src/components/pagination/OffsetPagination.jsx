@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import SearchModal from "../search/SearchModal";
 
-const OffsetPagination = ({ pageNumber, totalPages, onPageChange }) => {
+const OffsetPagination = ({ pageNumber, totalPages, onPageChange, searchTypes, onSearch }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const handleSearch = (query) => {
-    console.log("검색:", query);
+  const handleSearch = (type, query) => {
+    onSearch(type, query);
     setIsSearchOpen(false);
   };
 
@@ -22,12 +22,11 @@ const OffsetPagination = ({ pageNumber, totalPages, onPageChange }) => {
     <>
       <div className="flex justify-center mt-8">
         <div className="inline-flex items-center gap-3">
-          {/* 페이지네이션 버튼 그룹 */}
           <div className="flex gap-2">
             <button
               onClick={() => onPageChange(pageNumber - 1)}
               disabled={pageNumber === 1}
-              className="px-3 py-2 text-sm transition bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-2 text-sm bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               ◀ 이전
             </button>
@@ -49,7 +48,7 @@ const OffsetPagination = ({ pageNumber, totalPages, onPageChange }) => {
             <button
               onClick={() => onPageChange(pageNumber + 1)}
               disabled={pageNumber === totalPages}
-              className="px-3 py-2 text-sm transition bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-2 text-sm bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               다음 ▶
             </button>
@@ -58,7 +57,7 @@ const OffsetPagination = ({ pageNumber, totalPages, onPageChange }) => {
           {/* 🔍 검색 버튼 */}
           <button
             onClick={() => setIsSearchOpen(true)}
-            className="px-3 py-2 text-sm text-gray-700 transition bg-white border border-gray-300 rounded hover:bg-gray-100"
+            className="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-100"
           >
             🔍 검색
           </button>
@@ -70,6 +69,7 @@ const OffsetPagination = ({ pageNumber, totalPages, onPageChange }) => {
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         onSearch={handleSearch}
+        searchTypes={searchTypes}
       />
     </>
   );

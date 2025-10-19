@@ -11,6 +11,7 @@ const SubmissionListPage = () => {
   const [firstSeenId, setFirstSeenId] = useState(null);
   const [lastSeenId, setLastSeenId] = useState(null);
   const [totalCount, setTotalCount] = useState(null);
+  const [searchParams, setSearchParams] = useState({});
   const size = 20;
 
   const { memberId } = useParams();
@@ -19,9 +20,12 @@ const SubmissionListPage = () => {
 
   const fetchSubmissions = async (params = {}) => {
     try {
-      const url = memberId ? `/submissions/page/member/${memberId}` : "/submissions/page";
+      const url = memberId ? `/submissions/page/member/${memberId}` : "/submissions/search";
 
-      const response = await AxiosInstance.get(url, { params });
+      const response = await AxiosInstance.get(url, {
+        params: { size, ...params }
+      });
+
       const { content, hasNext, hasPrev, totalCount } = response.data.data;
 
       setSubmissions(content);
@@ -38,25 +42,68 @@ const SubmissionListPage = () => {
     }
   };
 
+  /** ✅ 최초 로드 */
   useEffect(() => {
     fetchSubmissions();
   }, [memberId]);
+
+  /** ✅ 검색 실행 */
+  /**
+   * 다중 조건 검색을 실행합니다.
+   * @param {Object} filters - { loginId, problemNumber, language, status, submissionId }
+   */
+  const handleSearch = (filters) => {
+    console.log("검색 조건:", filters);
+
+    // 유효한 검색 조건만 필터링
+    const activeFilters = Object.fromEntries(
+      Object.entries(filters).filter(([_, v]) =>
+        typeof v === "string" ? v.trim() !== "" : v !== ""
+      )
+    );
+
+    if (Object.keys(activeFilters).length === 0) return;
+
+    setSearchParams(activeFilters);
+    fetchSubmissions(activeFilters);
+  };
+
+  /** ✅ 전체 보기로 돌아가기 */
+  const handleResetSearch = () => {
+    setSearchParams({});
+    fetchSubmissions();
+  };
+
+  const isSearching = Object.keys(searchParams).length > 0;
+  const totalLabel = totalCount !== null ? `총 제출 수: ${totalCount}회` : "";
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-64px)] bg-gray-50">
       {/* 상단 제목 */}
       <div className="flex-none pt-8 pb-4 text-center">
-        <h2 className="text-2xl font-bold text-gray-800">
-          {nickname ? `${nickname}의 채점 현황` : "채점 현황"}
+        <h2 className="text-3xl font-bold text-gray-800">
+          {isSearching
+            ? "🔍 검색 결과"
+            : memberId
+              ? `📜 ${nickname || "회원"}의 채점 현황`
+              : "채점 현황"}
         </h2>
-        {memberId && totalCount !== null && (
-          <p className="mt-1 text-sm text-gray-600">
-            총 제출 수: <span className="font-semibold">{totalCount}</span> 회
-          </p>
+
+        {/* 전체 보기 버튼 */}
+        {isSearching && (
+          <button
+            onClick={handleResetSearch}
+            className="px-3 py-1 mt-3 text-sm text-gray-600 border rounded hover:bg-gray-100"
+          >
+            전체 보기로 돌아가기
+          </button>
         )}
+
+        {/* 총 제출 수 (회원 모드일 때만 표시) */}
+        {memberId && totalLabel && <p className="mt-2 text-sm text-gray-600">{totalLabel}</p>}
       </div>
 
-      {/* 스크롤 영역 */}
+      {/* 리스트 영역 */}
       <div className="flex-1 px-6 pb-6 overflow-y-auto">
         <div className="max-w-5xl mx-auto">
           {submissions.length === 0 ? (
@@ -71,13 +118,15 @@ const SubmissionListPage = () => {
         </div>
       </div>
 
-      {/* 하단 고정 페이지네이션 */}
+      {/* 하단 페이지네이션 */}
       <div className="flex-none sticky bottom-0 z-10 bg-gray-50 border-t border-gray-200 shadow-[0_-2px_6px_rgba(0,0,0,0.05)] py-4">
         <CursorPagination
           hasNext={hasNext}
           hasPrev={hasPrev}
-          onNext={() => fetchSubmissions({ lastSeenId, size: size + 1 })}
-          onPrev={() => fetchSubmissions({ firstSeenId, size: size + 1 })}
+          onNext={() => fetchSubmissions({ lastSeenId })}
+          onPrev={() => fetchSubmissions({ firstSeenId })}
+          onSearch={handleSearch}
+          searchTypes={memberId ? null : []} // 회원 모드에서는 검색 비활성화
         />
       </div>
     </div>
