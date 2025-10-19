@@ -1,18 +1,13 @@
 import React, { useState } from "react";
-import SearchModal from "../search/SearchModal";
+import SubmissionSearchModal from "../search/SubmissionSearchModal"; // ✅ 교체됨
 
-const CursorPagination = ({ hasNext, hasPrev, onNext, onPrev }) => {
+const CursorPagination = ({ hasNext, hasPrev, onNext, onPrev, onSearch }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-
-  const handleSearch = (query) => {
-    console.log("검색:", query);
-  };
 
   return (
     <>
       <div className="flex justify-center mt-6">
         <div className="inline-flex items-center gap-3">
-          {/* 페이지네이션 버튼 */}
           <div className="flex gap-4">
             <button
               onClick={onPrev}
@@ -41,11 +36,14 @@ const CursorPagination = ({ hasNext, hasPrev, onNext, onPrev }) => {
         </div>
       </div>
 
-      {/* 검색 모달 */}
-      <SearchModal
+      {/* ✅ 채점현황용 검색 모달 */}
+      <SubmissionSearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
-        onSearch={handleSearch}
+        onSearch={(filters) => {
+          onSearch(filters);
+          setIsSearchOpen(false);
+        }}
       />
     </>
   );
