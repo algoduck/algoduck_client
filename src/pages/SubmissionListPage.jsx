@@ -18,13 +18,20 @@ const SubmissionListPage = () => {
   const location = useLocation();
   const nickname = location.state?.nickname;
 
-  const fetchSubmissions = async (params = {}) => {
+  const fetchSubmissions = async (extraParams = {}) => {
     try {
       const url = memberId ? `/submissions/page/member/${memberId}` : "/submissions/search";
 
-      const response = await AxiosInstance.get(url, {
-        params: { size, ...params }
-      });
+      // 이전 검색조건 유지
+      const mergedParams = {
+        size,
+        ...searchParams,
+        ...extraParams
+      };
+
+      console.log("요청 파라미터:", mergedParams);
+
+      const response = await AxiosInstance.get(url, { params: mergedParams });
 
       const { content, hasNext, hasPrev, totalCount } = response.data.data;
 
@@ -47,11 +54,6 @@ const SubmissionListPage = () => {
     fetchSubmissions();
   }, [memberId]);
 
-  /** ✅ 검색 실행 */
-  /**
-   * 다중 조건 검색을 실행합니다.
-   * @param {Object} filters - { loginId, problemNumber, language, status, submissionId }
-   */
   const handleSearch = (filters) => {
     console.log("검색 조건:", filters);
 
@@ -123,10 +125,14 @@ const SubmissionListPage = () => {
         <CursorPagination
           hasNext={hasNext}
           hasPrev={hasPrev}
-          onNext={() => fetchSubmissions({ lastSeenId })}
-          onPrev={() => fetchSubmissions({ firstSeenId })}
+          onNext={() => {
+            if (lastSeenId) fetchSubmissions({ lastSeenId });
+          }}
+          onPrev={() => {
+            if (firstSeenId) fetchSubmissions({ firstSeenId });
+          }}
           onSearch={handleSearch}
-          searchTypes={memberId ? null : []} // 회원 모드에서는 검색 비활성화
+          searchTypes={memberId ? null : []}
         />
       </div>
     </div>
