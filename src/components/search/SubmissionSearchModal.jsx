@@ -9,7 +9,7 @@ const SubmissionSearchModal = ({ isOpen, onClose, onSearch }) => {
   };
 
   const [filters, setFilters] = useState({
-    loginId: "",
+    nickname: "",
     problemNumber: "",
     language: "",
     status: "",
@@ -42,7 +42,7 @@ const SubmissionSearchModal = ({ isOpen, onClose, onSearch }) => {
 
   const handleReset = () => {
     setFilters({
-      loginId: "",
+      nickname: "",
       problemNumber: "",
       language: "",
       status: "",
@@ -56,13 +56,13 @@ const SubmissionSearchModal = ({ isOpen, onClose, onSearch }) => {
         <h2 className="mb-4 text-xl font-semibold text-center">채점 내역 검색</h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          {/* 아이디 */}
+          {/* 닉네임 */}
           <input
             type="text"
-            name="loginId"
-            value={filters.loginId}
+            name="nickname"
+            value={filters.nickname}
             onChange={handleChange}
-            placeholder="아이디"
+            placeholder="닉네임"
             className="px-3 py-2 border border-gray-300 rounded"
           />
 
