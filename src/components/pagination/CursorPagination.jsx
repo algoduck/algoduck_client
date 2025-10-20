@@ -1,8 +1,16 @@
-import React, { useState } from "react";
-import SubmissionSearchModal from "../search/SubmissionSearchModal"; // ✅ 교체됨
+import React, { useEffect, useState } from "react";
+import SubmissionSearchModal from "../search/SubmissionSearchModal";
 
-const CursorPagination = ({ hasNext, hasPrev, onNext, onPrev, onSearch }) => {
+const CursorPagination = ({ hasNext, hasPrev, onNext, onPrev, onSearch, resetTrigger }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [resetSignal, setResetSignal] = useState(0);
+
+  // ✅ resetTrigger가 바뀔 때마다 모달 초기화 신호 전송
+  useEffect(() => {
+    if (resetTrigger > 0) {
+      setResetSignal((prev) => prev + 1);
+    }
+  }, [resetTrigger]);
 
   return (
     <>
@@ -44,6 +52,7 @@ const CursorPagination = ({ hasNext, hasPrev, onNext, onPrev, onSearch }) => {
           onSearch(filters);
           setIsSearchOpen(false);
         }}
+        resetSignal={resetSignal} // ✅ 전달
       />
     </>
   );
