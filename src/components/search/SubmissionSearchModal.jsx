@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const SubmissionSearchModal = ({ isOpen, onClose, onSearch }) => {
+const SubmissionSearchModal = ({ isOpen, onClose, onSearch, resetSignal }) => {
   const LANGUAGE_VERSION_MAP = {
     Java: [1001, 1002, 1003, 1004],
     "C++": [1005, 1006, 1007, 1008, 1009, 1010],
@@ -15,6 +15,17 @@ const SubmissionSearchModal = ({ isOpen, onClose, onSearch }) => {
     status: "",
     submissionId: ""
   });
+
+  // ✅ resetSignal 변경 시 입력값 전체 초기화
+  useEffect(() => {
+    setFilters({
+      nickname: "",
+      problemNumber: "",
+      language: "",
+      status: "",
+      submissionId: ""
+    });
+  }, [resetSignal]);
 
   if (!isOpen) return null;
 

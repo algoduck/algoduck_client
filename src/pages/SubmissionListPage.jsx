@@ -12,6 +12,7 @@ const SubmissionListPage = () => {
   const [lastSeenId, setLastSeenId] = useState(null);
   const [totalCount, setTotalCount] = useState(null);
   const [searchParams, setSearchParams] = useState({});
+  const [resetTrigger, setResetTrigger] = useState(0); // ✅ 추가
   const size = 20;
 
   const { memberId } = useParams();
@@ -22,12 +23,8 @@ const SubmissionListPage = () => {
     try {
       const url = memberId ? `/submissions/page/member/${memberId}` : "/submissions/search";
 
-      // 이전 검색조건 유지
-      const mergedParams = {
-        size,
-        ...searchParams,
-        ...extraParams
-      };
+      // ✅ reset 모드일 경우 검색 조건 무시
+      const mergedParams = extraParams.reset ? { size } : { size, ...searchParams, ...extraParams };
 
       console.log("요청 파라미터:", mergedParams);
 
@@ -43,6 +40,9 @@ const SubmissionListPage = () => {
       if (content.length > 0) {
         setFirstSeenId(content[0].submissionId);
         setLastSeenId(content[content.length - 1].submissionId);
+      } else {
+        setFirstSeenId(null);
+        setLastSeenId(null);
       }
     } catch (error) {
       console.error("Failed to fetch submissions:", error);
@@ -67,13 +67,17 @@ const SubmissionListPage = () => {
     if (Object.keys(activeFilters).length === 0) return;
 
     setSearchParams(activeFilters);
+    setFirstSeenId(null);
+    setLastSeenId(null);
     fetchSubmissions(activeFilters);
   };
 
-  /** ✅ 전체 보기로 돌아가기 */
   const handleResetSearch = () => {
     setSearchParams({});
-    fetchSubmissions();
+    setFirstSeenId(null);
+    setLastSeenId(null);
+    fetchSubmissions({ reset: true }); // ✅ 검색 조건 완전 초기화
+    setResetTrigger((prev) => prev + 1); // ✅ 모달 입력값 초기화 트리거
   };
 
   const isSearching = Object.keys(searchParams).length > 0;
@@ -133,6 +137,7 @@ const SubmissionListPage = () => {
           }}
           onSearch={handleSearch}
           searchTypes={memberId ? null : []}
+          resetTrigger={resetTrigger} // ✅ 전달
         />
       </div>
     </div>
