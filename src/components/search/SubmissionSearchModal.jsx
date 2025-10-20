@@ -2,7 +2,10 @@ import React, { useState } from "react";
 
 const SubmissionSearchModal = ({ isOpen, onClose, onSearch }) => {
   const LANGUAGE_VERSION_MAP = {
-    Java: [1001, 1002, 1003, 1004]
+    Java: [1001, 1002, 1003, 1004],
+    "C++": [1005, 1006, 1007, 1008, 1009, 1010],
+    Python: [1011],
+    Javascript: [1012]
   };
 
   const [filters, setFilters] = useState({
@@ -82,8 +85,9 @@ const SubmissionSearchModal = ({ isOpen, onClose, onSearch }) => {
           >
             <option value="">언어 선택</option>
             <option value="Java">Java</option>
-            <option value="Python">Python</option>
             <option value="C++">C++</option>
+            <option value="Python">Python</option>
+            <option value="Javascript">Javascript</option>
           </select>
 
           {/* 상태 */}
