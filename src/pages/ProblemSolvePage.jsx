@@ -64,7 +64,10 @@ const ProblemSolvePage = () => {
 
       const { data } = await AxiosInstance.post("/submissions", payload);
       if (data.success) {
-        navigate(`/submissions/member/${memberId}`);
+        const member = JSON.parse(localStorage.getItem("member"));
+        navigate(`/submissions/member/${memberId}`, {
+          state: { nickname: member.nickname }
+        });
       } else {
         alert("제출에 실패했습니다.");
       }
