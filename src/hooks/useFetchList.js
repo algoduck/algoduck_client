@@ -12,22 +12,31 @@ const useFetchList = (baseUrl, params = {}) => {
       setIsLoading(true);
       try {
         // ✅ 검색 중인지 판별
-        const isSearching = params.type && params.query;
+        const isSearching =
+          typeof params.type === "string" &&
+          params.type.trim() !== "" &&
+          typeof params.query === "string" &&
+          params.query.trim() !== "";
 
-        // ✅ baseUrl 기준으로 검색 URL 구성
+        // ✅ URL 결정
         const requestUrl = isSearching
           ? baseUrl.endsWith("/search")
             ? baseUrl
             : `${baseUrl}/search`
           : baseUrl;
 
+        // ✅ 빈 문자열 파라미터 제거
+        const cleanedParams = Object.fromEntries(
+          Object.entries(params).filter(([, v]) => v !== "" && v !== null && v !== undefined)
+        );
+
         // ✅ 요청 전송
-        const { data } = await AxiosInstance.get(requestUrl, { params });
+        const { data } = await AxiosInstance.get(requestUrl, {
+          params: cleanedParams
+        });
 
         if (data.success) {
-          // problems, members 모두 지원
           const content = data.data.problems || data.data.members || data.data.submissions || [];
-
           setData(content);
           setTotalCount(data.data.totalCount || 0);
         } else {
@@ -42,7 +51,7 @@ const useFetchList = (baseUrl, params = {}) => {
     };
 
     fetchList();
-  }, [baseUrl, JSON.stringify(params)]); // param 변경 시 refetch
+  }, [baseUrl, JSON.stringify(params)]);
 
   return { data, totalCount, isLoading, error };
 };
